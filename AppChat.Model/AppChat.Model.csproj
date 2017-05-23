@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0AAE7A54-1F23-49AA-A3BA-B03D1E399346}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AppChat.Model</RootNamespace>
+    <AssemblyName>AppChat.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseEntity.cs" />
+    <Compile Include="Core\layim_apply.cs" />
+    <Compile Include="Core\layim_apply_result.cs" />
+    <Compile Include="Core\layim_friend_group.cs" />
+    <Compile Include="Core\layim_friend_group_detail.cs" />
+    <Compile Include="Core\layim_group.cs" />
+    <Compile Include="Core\layim_group_detail.cs" />
+    <Compile Include="Core\layim_msg_history.cs" />
+    <Compile Include="Core\layim_msg_unread.cs" />
+    <Compile Include="Core\layim_sys_backimgs.cs" />
+    <Compile Include="Core\layim_sys_user_log.cs" />
+    <Compile Include="Core\layim_user.cs" />
+    <Compile Include="Core\layim_user_autoreply.cs" />
+    <Compile Include="Core\layim_user_setting.cs" />
+    <Compile Include="Core\layim_user_skin.cs" />
+    <Compile Include="Core\v_group.cs" />
+    <Compile Include="Core\v_group_detail.cs" />
+    <Compile Include="Core\v_layim_apply.cs" />
+    <Compile Include="Core\v_layim_friend_group.cs" />
+    <Compile Include="Core\v_layim_friend_group_detail.cs" />
+    <Compile Include="Core\v_layim_friend_group_detail_info.cs" />
+    <Compile Include="Core\v_layim_random.cs" />
+    <Compile Include="Enum\LayIMEnum.cs" />
+    <Compile Include="Log\LayIMLogModel.cs" />
+    <Compile Include="Message\ApplyMessage.cs" />
+    <Compile Include="Message\ClientToClientMessage.cs" />
+    <Compile Include="Message\DB\ChatMessage.cs" />
+    <Compile Include="Message\DB\LoginUser.cs" />
+    <Compile Include="Online\OnlineUser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Result\SendMessageResult.cs" />
+    <Compile Include="ViewModel\LayIMGroup.cs" />
+    <Compile Include="ViewModel\LayIMUser.cs" />
+    <Compile Include="ViewModel\PageSearchOptions.cs" />
+    <Compile Include="ViewModel\PageView.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
