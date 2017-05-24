@@ -12,14 +12,14 @@ namespace Models
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int applyid {get;set;}
+        public Guid applyid {get;set;}
 
         /// <summary>
         /// Desc:- 
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int userid {get;set;}
+        public Guid userid {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -54,7 +54,7 @@ namespace Models
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int targetid {get;set;}
+        public Guid targetid {get;set;}
 
         /// <summary>
         /// Desc:- 

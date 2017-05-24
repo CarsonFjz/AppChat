@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace  AppChat.Model
+namespace AppChat.Model.Core
 {
     public class v_group_detail
     {
@@ -12,14 +12,14 @@ namespace  AppChat.Model
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int gid {get;set;}
+        public Guid gid {get;set;}
 
         /// <summary>
         /// Desc:- 
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int userid {get;set;}
+        public Guid userid {get;set;}
 
         /// <summary>
         /// Desc:- 

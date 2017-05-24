@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AppChat.Service.User
@@ -29,16 +30,104 @@ namespace AppChat.Service.User
         private IElasticGroupService _elastic;
         private IBaseRepository<layim_user> _user;
         private IBaseRepository<ApplyMessage> _applyMessage;
+        private IBaseRepository<v_layim_friend_group_detail_info> _friendListInfo;
         public UserService(IRedisCache redisCache, 
                            IElasticGroupService elastic,
                            IBaseRepository<layim_user> user,
-                           IBaseRepository<ApplyMessage> applyMessage)
+                           IBaseRepository<ApplyMessage> applyMessage,
+                           IBaseRepository<v_layim_friend_group_detail_info> friendListInfo)
         {
             _redisCache = redisCache;
             _elastic = elastic;
             _user = user;
             _applyMessage = applyMessage;
+            _friendListInfo = friendListInfo;
         }
+        //------------------基本信息star--------------------
+
+        #region 用户登录流程
+        /// <summary>
+        /// 用户登陆或者注册，返回用户id如果为 0 说明密码错误
+        /// </summary>
+        /// <param name="loginName"></param>
+        /// <param name="loginPwd"></param>
+        /// <param name="nickName"></param>
+        /// <returns></returns>
+        public JsonResultModel UserLoginOrRegister(string loginName, string loginPwd, out int userid)
+        {
+            userid = 0;
+            var wrongNameOrPwdFlag = -1;
+            if (string.IsNullOrEmpty(loginName) || string.IsNullOrEmpty(loginPwd))
+            {
+                return JsonResultHelper.CreateJson(new { userid = wrongNameOrPwdFlag });
+            }
+            //TODO:判断用户是否存在,存在就获取信息 done
+            var loginUser = _user.QuerySingle(x => x.loginname == loginName && x.loginpwd == loginPwd);
+
+            if (loginUser != null)
+            {
+                return JsonResultHelper.CreateJson(new { userid = loginUser.id });
+            }
+            return JsonResultHelper.CreateJson(false);
+
+        }
+        #endregion
+
+        #region 获取某个用户的好友列表
+        /// <summary>
+        /// 获取某个用户的好友列表
+        /// </summary>
+        /// <param name="userid">用户ID</param>
+        /// <returns>返回格式如下 ""或者 "10001,10002,10003"</returns>
+        public string GetUserFriends(int userid)
+        {
+            //先读取缓存
+            var friends = _redisCache.GetUserFriendList(userid);
+            //如果缓存中没有
+            if (friends == "")
+            {
+                //从数据库读取，在保存到缓存中
+                var friendList = _friendListInfo.QueryByWhere(x => x.userid == userid);
+
+                StringBuilder friendStr = new StringBuilder();
+
+                foreach (var item in friendList)
+                {
+                    friendStr.Append(item.uid);
+                }
+                _redisCache.SetUserFriendList(userid, friends);
+            }
+            return friends;
+        }
+        #endregion
+
+        #region 获取用户有关的消息
+        public JsonResultModel GetUserApplyMessage(int userid)
+        {
+            string procName = "exec Proc_LayIM_GetUserApplyRecord @userid";
+
+            var userMessageResult = _applyMessage.QueryBySqlTransactions<ApplyMessage>(procName, new { userid = userid });
+
+            foreach (var item in userMessageResult)
+            {
+                item.isself = userid == item.userid;
+                item.addtime = item.addtime.ToDateTime().ToString("yyyy/MM/dd HH:mm");
+            }
+
+            return JsonResultHelper.CreateJson(userMessageResult, true);
+        }
+        #endregion
+
+        #region 读取用户所在的群
+        public string[] GetUserAllGroups(string userId)
+        {
+            var result = _dal.GetUserAllGroups(userId);
+            return result;
+        }
+        #endregion
+
+        //------------------基本信息end--------------------
+
         #region 获取用户登录聊天室后的基本信息
 
         private BaseListResult ToBaseListResult(DataSet ds)
@@ -141,34 +230,6 @@ namespace AppChat.Service.User
         }
         #endregion
 
-        #region 用户登录或者注册流程
-        /// <summary>
-        /// 用户登陆或者注册，返回用户id如果为 0 说明密码错误
-        /// </summary>
-        /// <param name="loginName"></param>
-        /// <param name="loginPwd"></param>
-        /// <param name="nickName"></param>
-        /// <returns></returns>
-        public JsonResultModel UserLoginOrRegister(string loginName, string loginPwd, out int userid)
-        {
-            userid = 0;
-            var wrongNameOrPwdFlag = -1;
-            if (string.IsNullOrEmpty(loginName) || string.IsNullOrEmpty(loginPwd))
-            {
-                return JsonResultHelper.CreateJson(new { userid = wrongNameOrPwdFlag });
-            }
-            //TODO:判断用户是否存在,存在就获取信息 done
-            var loginUser = _user.QuerySingle(x => x.loginname == loginName && x.loginpwd == loginPwd);
-
-            if (loginUser != null)
-            {
-                return JsonResultHelper.CreateJson(new { userid = loginUser.id });
-            }
-            return JsonResultHelper.CreateJson(false);
-
-        }
-        #endregion
-
         #region 用户创建群
         public JsonResultModel CreateGroup(string groupName, string groupDesc, int userid)
         {
@@ -249,43 +310,9 @@ namespace AppChat.Service.User
 
         #endregion
 
-        #region 获取用户有关的消息
-        public JsonResultModel GetUserApplyMessage(int userid)
-        {
-            string procName = "exec Proc_LayIM_GetUserApplyRecord @userid";
+        
 
-            var userMessageResult = _applyMessage.QueryBySqlTransactions<ApplyMessage>(procName,new { userid = userid});
-
-            foreach (var item in userMessageResult)
-            {
-                item.isself = userid == item.userid;
-                item.addtime = item.addtime.ToDateTime().ToString("yyyy/MM/dd HH:mm");
-            }
-
-            return JsonResultHelper.CreateJson(userMessageResult, true);
-        }
-        #endregion
-
-        #region 获取某个用户的好友列表
-        /// <summary>
-        /// 获取某个用户的好友列表
-        /// </summary>
-        /// <param name="userid">用户ID</param>
-        /// <returns>返回格式如下 ""或者 "10001,10002,10003"</returns>
-        public string GetUserFriends(int userid)
-        {
-            //先读取缓存
-            var friends = _redisCache.GetUserFriendList(userid);
-            //如果缓存中没有
-            if (friends == "")
-            {
-                //从数据库读取，在保存到缓存中
-                friends = _dal.GetUserFriends(userid);
-                _redisCache.SetUserFriendList(userid, friends);
-            }
-            return friends;
-        }
-        #endregion
+        
 
         #region 读取历史纪录 根据条件 开始时间，结束时间  聊天关键字  组
 
@@ -353,13 +380,7 @@ namespace AppChat.Service.User
         }
         #endregion
 
-        #region 读取用户所在的群
-        public string[] GetUserAllGroups(string userId)
-        {
-            var result = _dal.GetUserAllGroups(userId);
-            return result;
-        }
-        #endregion
+        
 
         #region 更换用户皮肤
         public bool UpdateUserSkin(int userid, string path)

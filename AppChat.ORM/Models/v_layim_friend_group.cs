@@ -12,7 +12,7 @@ namespace Models
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int id {get;set;}
+        public Guid id {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -40,7 +40,7 @@ namespace Models
         /// Default:- 
         /// Nullable:True 
         /// </summary>
-        public int? userid {get;set;}
+        public Guid? userid {get;set;}
 
         /// <summary>
         /// Desc:- 

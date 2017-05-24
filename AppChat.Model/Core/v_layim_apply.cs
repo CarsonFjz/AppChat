@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace  AppChat.Model
+namespace AppChat.Model.Core
 {
     public class v_layim_apply
     {
@@ -12,14 +12,14 @@ namespace  AppChat.Model
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int applyid {get;set;}
+        public Guid applyid {get;set;}
 
         /// <summary>
         /// Desc:- 
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int userid {get;set;}
+        public Guid userid {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -54,7 +54,7 @@ namespace  AppChat.Model
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int targetid {get;set;}
+        public Guid targetid {get;set;}
 
         /// <summary>
         /// Desc:- 

@@ -10,7 +10,7 @@
 <#@ import namespace="SqlSugar" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Web" #>
-<#@ assembly name="$(SolutionDir)\AppChat.ORM\bin\Debug\SqlSugar.dll" #>
+<#@ assembly name="$(SolutionDir)\AppChat.ORM\T4\SqlSugar.dll" #>
 
 <# 
      

@@ -12,7 +12,7 @@ namespace Models
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int id {get;set;}
+        public Guid id {get;set;}
 
         /// <summary>
         /// Desc:用户ID 

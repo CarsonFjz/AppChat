@@ -12,14 +12,14 @@ namespace Models
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int gid {get;set;}
+        public Guid gid {get;set;}
 
         /// <summary>
         /// Desc:- 
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int uid {get;set;}
+        public Guid uid {get;set;}
 
         /// <summary>
         /// Desc:- 

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace AppChat.Model
+namespace Models
 {
     public class salary
     {

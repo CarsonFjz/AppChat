@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace  AppChat.Model
+namespace AppChat.Model.Core
 {
     public class v_layim_friend_group_detail_info
     {
@@ -12,7 +12,7 @@ namespace  AppChat.Model
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int groupid {get;set;}
+        public Guid groupid {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -33,7 +33,7 @@ namespace  AppChat.Model
         /// Default:- 
         /// Nullable:True 
         /// </summary>
-        public int? userid {get;set;}
+        public Guid? userid {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -61,7 +61,7 @@ namespace  AppChat.Model
         /// Default:- 
         /// Nullable:True 
         /// </summary>
-        public int? friendid {get;set;}
+        public Guid? friendid {get;set;}
 
         /// <summary>
         /// Desc:- 

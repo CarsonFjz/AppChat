@@ -45,7 +45,7 @@ namespace AppChat.SignalRHostSelf.Hubs
             get
             {
                 var contextBase = Context.Request.GetHttpContext();
-                return LayIMCache.Instance.GetCurrentUserId(contextBase);
+                return _redisCache.GetCurrentUserId(contextBase);
             }
         }
         /// <summary>

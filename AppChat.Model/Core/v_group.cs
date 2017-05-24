@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace  AppChat.Model
+namespace AppChat.Model.Core
 {
     public class v_group
     {
