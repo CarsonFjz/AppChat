@@ -85,7 +85,7 @@ namespace AppChat.Service.User
             if (friends.Count == 0)
             {
                 //从数据库读取，在保存到缓存中
-                var friendList = _friendListInfo.QueryByWhere(x => x.userid == userid);
+                var friendList = await _friendListInfo.QueryByWhereAsync(x => x.userid == userid);
 
                 StringBuilder friendStr = new StringBuilder();
 
