@@ -24,7 +24,7 @@
  
 	 using (var db = new SqlSugarClient("server=.;Initial Catalog=LayIM;Persist Security Info=True;User ID=sa;Password=123456"))
      {
-          db.ClassGenerating.CreateClassFiles(db, projectDir +"/Models","Models");  
+          db.ClassGenerating.CreateClassFiles(db, solutionDir + "/AppChat.Model/Core","AppChat.Model.Core");  
 
       };
 #>

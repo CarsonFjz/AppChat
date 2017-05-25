@@ -33,7 +33,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int targetid {get;set;}
+        public string targetid {get;set;}
 
         /// <summary>
         /// Desc:申请时间 

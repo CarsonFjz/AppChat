@@ -40,7 +40,7 @@ namespace Models
         /// Default:- 
         /// Nullable:True 
         /// </summary>
-        public Guid? userid {get;set;}
+        public int? userid {get;set;}
 
         /// <summary>
         /// Desc:- 

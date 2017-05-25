@@ -1,4 +1,5 @@
 ﻿using AppChat.Model;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,14 @@ namespace AppChat.Utils.JsonResult
         public static JsonResultModel CreateJson(object data, bool success = true, string msg = null)
         {
             return new JsonResultModel { code = success ? JsonResultType.Success : JsonResultType.Failed, data = data, msg = msg };
+        }
+
+        public static async Task<JsonResultModel> CreateJsonAsync(object data, bool success = true, string msg = null)
+        {
+            return await Task.Run(() =>
+            {
+                return new JsonResultModel { code = success ? JsonResultType.Success : JsonResultType.Failed, data = data, msg = msg };
+            });
         }
     }
 }

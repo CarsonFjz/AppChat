@@ -19,7 +19,7 @@ namespace Models
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int applyid {get;set;}
+        public Guid applyid {get;set;}
 
         /// <summary>
         /// Desc:操作人id 

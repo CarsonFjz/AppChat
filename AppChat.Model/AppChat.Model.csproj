@@ -56,6 +56,7 @@
     <Compile Include="Core\layim_user_autoreply.cs" />
     <Compile Include="Core\layim_user_setting.cs" />
     <Compile Include="Core\layim_user_skin.cs" />
+    <Compile Include="Core\salary.cs" />
     <Compile Include="Core\v_group.cs" />
     <Compile Include="Core\v_group_detail.cs" />
     <Compile Include="Core\v_layim_apply.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="ViewModel\PageSearchOptions.cs" />
     <Compile Include="ViewModel\PageView.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

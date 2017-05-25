@@ -19,7 +19,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public Guid userid {get;set;}
+        public int userid {get;set;}
 
         /// <summary>
         /// Desc:- 

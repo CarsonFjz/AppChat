@@ -12,7 +12,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int groupid {get;set;}
+        public Guid groupid {get;set;}
 
         /// <summary>
         /// Desc:- 

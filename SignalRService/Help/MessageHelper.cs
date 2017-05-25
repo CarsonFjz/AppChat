@@ -132,27 +132,27 @@ namespace AppChat.SignalRHostSelf.Help
         /// </summary>
         public void SendUserOnOffLineMessage(string userId, bool online = true)
         {
-            int userid = userId.ToInt();
-            //1.获取用户的所有好友
+            //int userid = userId.ToInt();
+            ////1.获取用户的所有好友
 
-            var users = _userServer.GetUserFriends(userid);
-            //没有好友，不发消息
-            var friends = users.Split(new string[] { "$AppChat$" }, StringSplitOptions.RemoveEmptyEntries);
-            if (friends.Length == 2)
-            {
-                var avatar = friends[0];
-                var notifyUsers = friends[1];
+            //var users = _userServer.GetUserFriends(userid);
+            ////没有好友，不发消息
+            //var friends = users.Split(new string[] { "$AppChat$" }, StringSplitOptions.RemoveEmptyEntries);
+            //if (friends.Length == 2)
+            //{
+            //    var avatar = friends[0];
+            //    var notifyUsers = friends[1];
 
 
-                //2.发送用户上下线通知
-                UserOnOffLineMessage message = new UserOnOffLineMessage
-                {
-                    avatar = avatar,
-                    online = online,
-                    userid = userid
-                };
-                SendMessage(message, notifyUsers, ChatToClientType.UserOnOffLineToClient, true);
-            }
+            //    //2.发送用户上下线通知
+            //    UserOnOffLineMessage message = new UserOnOffLineMessage
+            //    {
+            //        avatar = avatar,
+            //        online = online,
+            //        userid = userid
+            //    };
+            //    SendMessage(message, notifyUsers, ChatToClientType.UserOnOffLineToClient, true);
+            //}
         }
     }
 }

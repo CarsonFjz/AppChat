@@ -19,14 +19,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public Guid userid {get;set;}
-
-        /// <summary>
-        /// Desc:- 
-        /// Default:- 
-        /// Nullable:True 
-        /// </summary>
-        public int? applyim {get;set;}
+        public int userid {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -54,7 +47,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public Guid targetid {get;set;}
+        public string targetid {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -62,13 +55,6 @@ namespace AppChat.Model.Core
         /// Nullable:True 
         /// </summary>
         public string targetname {get;set;}
-
-        /// <summary>
-        /// Desc:- 
-        /// Default:- 
-        /// Nullable:True 
-        /// </summary>
-        public int? targetim {get;set;}
 
         /// <summary>
         /// Desc:- 

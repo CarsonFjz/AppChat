@@ -12,7 +12,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int id {get;set;}
+        public Guid id {get;set;}
 
         /// <summary>
         /// Desc:群组名称 
@@ -75,7 +75,7 @@ namespace AppChat.Model.Core
         /// Default:((666666)) 
         /// Nullable:False 
         /// </summary>
-        public int im {get;set;}
+        public int uid {get;set;}
 
     }
 }

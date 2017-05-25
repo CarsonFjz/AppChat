@@ -12,7 +12,14 @@ namespace Models
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int id {get;set;}
+        public Guid id {get;set;}
+
+        /// <summary>
+        /// Desc:- 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid gid {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -20,13 +27,6 @@ namespace Models
         /// Nullable:False 
         /// </summary>
         public int uid {get;set;}
-
-        /// <summary>
-        /// Desc:- 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
-        public int gid {get;set;}
 
         /// <summary>
         /// Desc:未读消息个数 

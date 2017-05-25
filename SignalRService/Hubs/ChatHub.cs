@@ -100,13 +100,13 @@ namespace AppChat.SignalRHostSelf.Hubs
             //发送用户上线消息
             _messageHelp.SendUserOnOffLineMessage(CurrentUserId);
             //由于用户群一般不多，这里直接将用户全部加入群组中
-            var groups = _userServer.GetUserAllGroups(CurrentUserId);
-            //遍历组，该connectionId加入到组中，防止收不到消息
-            foreach (string group in groups)
-            {
-                var g = _createGroupServer.CreateName(group.ToInt());
-                Groups.Add(CurrentConnectId, g);
-            }
+            //var groups = _userServer.GetUserAllGroups(CurrentUserId);
+            ////遍历组，该connectionId加入到组中，防止收不到消息
+            //foreach (string group in groups)
+            //{
+            //    var g = _createGroupServer.CreateName(group.ToInt());
+            //    Groups.Add(CurrentConnectId, g);
+            //}
         }
 
         private void UserOffline()
