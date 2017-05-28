@@ -26,91 +26,86 @@ namespace AppChat.Service.User
     }
     public class UserService : IUserService
     {
-        private IRedisCache _redisCache;
-        private IElasticGroupService _elastic;
-        private IBaseRepository<layim_user> _user;
-        private IBaseRepository<ApplyMessage> _applyMessage;
-        private IBaseRepository<v_layim_friend_group_detail_info> _friendListInfo;
-        public UserService(IRedisCache redisCache, 
-                           IElasticGroupService elastic,
-                           IBaseRepository<layim_user> user,
-                           IBaseRepository<ApplyMessage> applyMessage,
-                           IBaseRepository<v_layim_friend_group_detail_info> friendListInfo)
+        private IRedisCache _redisCacheService;
+        private IElasticGroupService _elasticService;
+        private IBaseRepository<layim_user> _userService;
+        private IBaseRepository<ApplyMessage> _applyMessageService;
+        private IBaseRepository<v_group_detail> _groupListService;
+        private IBaseRepository<v_layim_friend_group> _friendListService;
+        private IBaseRepository<v_layim_friend_group_detail> _friendDetailListService;
+        public UserService(IRedisCache redisCacheService, 
+                           IElasticGroupService elasticService,
+                           IBaseRepository<layim_user> userService,
+                           IBaseRepository<ApplyMessage> applyMessageService,
+                           IBaseRepository<v_group_detail> groupListService,
+                           IBaseRepository<v_layim_friend_group> friendListService,
+                           IBaseRepository<v_layim_friend_group_detail> friendDetailListService)
         {
-            _redisCache = redisCache;
-            _elastic = elastic;
-            _user = user;
-            _applyMessage = applyMessage;
-            _friendListInfo = friendListInfo;
+            _redisCacheService = redisCacheService;
+            _elasticService = elasticService;
+            _userService = userService;
+            _applyMessageService = applyMessageService;
+            _groupListService = groupListService;
+            _friendListService = friendListService;
+            _friendDetailListService = friendDetailListService;
         }
 
         #region 获取用户登录聊天室后的基本信息
 
-        private BaseListResult ToBaseListResult(DataSet ds)
-        {
-            if (ds.Tables.Count > 0)
-            {
-                if (ds.Tables[0].Rows.Count == 0)
-                {
-                    return new BaseListResult();
-                }
-                //当前用户的信息
-                var rowMine = ds.Tables[0].Rows[0];
-                //用户组信息
-                var rowFriendDetails = ds.Tables[2].Rows.Cast<DataRow>().Select(x => new GroupUserEntity
-                {
-                    id = x["uid"].ToInt(),
-                    avatar = x["avatar"].ToString(),
-                    groupid = x["gid"].ToInt(),
-                    remarkname = x["remarkname"].ToString(),
-                    username = x["nickname"].ToString(),
-                    sign = x["sign"].ToString(),
-                    //status之前的字段是为空的，现在我们把他的在线状态加上，IsOnline方法接收一个userid参数，从Redis缓存中读取该用户是否在线并返回
-                    status = _redisCache.IsOnline(x["uid"].ToInt()) ? "online" : "hide"
-                }).OrderByDescending(x => x.status);//这里要根据用户是否在线这个字段排序，保证在线用户都在好友列表最上边
-                //用户组信息，执行分组
-                var friend = ds.Tables[1].Rows.Cast<DataRow>().Select(x => new FriendGroupEntity
-                {
-                    id = x["id"].ToInt(),
-                    groupname = x["name"].ToString(),
-                    online = 0,
-                    list = rowFriendDetails.Where(f => f.groupid == x["id"].ToInt())
-                });
-                //群组信息
-                var group = ds.Tables[3].Rows.Cast<DataRow>().Select(x => new GroupEntity
-                {
-                    id = x["id"].ToInt(),
-                    groupname = x["name"].ToString(),
-                    avatar = x["avatar"].ToString(),
-                    groupdesc = x["groupdesc"].ToString()
-                });
-                //用户皮肤，第一个是默认正在使用的
-                List<string> skin = ds.Tables[4].Rows.Cast<DataRow>().Select(x => x[0].ToString()).ToList();
-
-                BaseListResult result = new BaseListResult
-                {
-                    mine = new UserEntity
-                    {
-                        id = rowMine["id"].ToInt(),
-                        avatar = rowMine["avatar"].ToString(),
-                        sign = rowMine["sign"].ToString(),
-                        username = rowMine["nickname"].ToString(),
-                        status = "online"
-                    },
-                    friend = friend,
-                    group = group,
-                    skin = skin
-                };
-                return result;
-            }
-            return null;
-        }
-        public JsonResultModel GetChatRoomBaseInfo(int userid)
+        
+        public async Task<JsonResultModel> GetChatRoomBaseInfo(int userid)
         {
             if (userid == 0) { throw new ArgumentException("userid can't be zero"); }
-            var ds = _dal.GetChatRoomBaseInfo(userid);
-            var result = ToBaseListResult(ds);
-            return JsonResultHelper.CreateJson(result, result != null);
+
+            #region 1.0 当前用户信息
+            var mine = await _userService.QuerySingleAsync(x => x.id == userid);
+
+            var mineModel = new UserEntity
+            {
+                id = mine.id,
+                avatar = mine.headphoto,
+                sign = mine.sign,
+                username = mine.nickname,
+                status = "online"
+            };
+            #endregion
+
+            #region 2.0 好友信息
+            //2.1 获取好友用户组
+            var friendGroup = await _friendListService.QueryByWhereAsync(x => x.userid == userid, "sort");
+            //2.2 把用户组id取出来
+            var friendGroupIdList = friendGroup.Select(x => x.id);
+            //2.3 找出每个用户组下所有好友信息
+            var friendList = _friendDetailListService.QueryByInAsync(x => x.gid);
+
+            var friendGroupModel = friendGroup.Select(x => new FriendGroupEntity() {
+                id = x.id,
+                groupname = x.name,
+                online = 0,
+                list = friendList.Select(y => new GroupUserEntity()
+                {
+                    id = y.uid,
+                    avatar = y.headphoto,
+                    groupid = y.gid,
+                    remarkname = y.gname,
+                    username = y.nickname,
+                    sign = y.sign,
+                    //status之前的字段是为空的，现在我们把他的在线状态加上，IsOnline方法接收一个userid参数，从Redis缓存中读取该用户是否在线并返回
+                    status = _redisCacheService.IsOnline(y.uid) ? "online" : "hide"
+                }).OrderByDescending(y => y.status)
+            });
+            #endregion
+
+
+            #region 3.群信息
+            //var group = await _groupListService. 
+            #endregion
+            BaseListResult result = new BaseListResult
+            {
+                mine = mineModel,
+                friend = friendGroupModel,
+            };
+            return await JsonResultHelper.CreateJsonAsync(result, result != null);
         }
         #endregion
 
@@ -154,7 +149,7 @@ namespace AppChat.Service.User
             {
                 //同步ES库
 
-                var group = _elastic.IndexGroup(dt);
+                var group = _elasticService.IndexGroup(dt);
                 var data = GetMessage(group);
                 return JsonResultHelper.CreateJson(data, true);
             }

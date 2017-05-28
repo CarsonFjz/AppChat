@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AppChat.Model.Core
 {
-    public class salary
+    public class salarys
     {
         
         /// <summary>

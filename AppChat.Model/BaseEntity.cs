@@ -9,26 +9,26 @@ using System.Threading.Tasks;
 */
 namespace AppChat.Model
 {
-    /// <summary>
-    /// 基类
-    /// </summary>
-    public class BaseEntity
-    {
-        public int id { get; set; }
-    }
+
 
     /// <summary>
     /// 基类
     /// </summary>
-    public class AvatarEntity : BaseEntity
+    public class AvatarIntEntity
     {
+        public int id { get; set; }
         public string avatar { get; set; } 
+    }
+    public class AvatarGuidEntity
+    {
+        public Guid id { get; set; }
+        public string avatar { get; set; }
     }
 
     /// <summary>
     /// 用户
     /// </summary>
-    public class UserEntity : AvatarEntity
+    public class UserEntity : AvatarIntEntity
     {
         public string status { get; set; }
         public string username { get; set; }
@@ -40,14 +40,14 @@ namespace AppChat.Model
     /// </summary>
     public class GroupUserEntity : UserEntity
     {
-        public int groupid { get; set; }
+        public Guid groupid { get; set; }
         public string remarkname { get; set; }
     }
 
     /// <summary>
     ///  群
     /// </summary>
-    public class GroupEntity : AvatarEntity
+    public class GroupEntity : AvatarGuidEntity
     {
         public string groupname { get; set; }
         public string groupdesc { get; set; }
@@ -79,8 +79,6 @@ namespace AppChat.Model
     {
         public BaseListResult()
         {
-            //friend = new List<FriendGroupEntity>();
-            //group = new List<GroupEntity>();
         }
         public IEnumerable<FriendGroupEntity> friend { get; set; }
         public IEnumerable<GroupEntity> group { get; set; }
@@ -103,7 +101,7 @@ namespace AppChat.Model
         /// <summary>
         /// 群成员列表
         /// </summary>
-        public IEnumerable<GroupUserEntity> list { get; set; }
+        public List<GroupUserEntity> list { get; set; }
     }
 
     /// <summary>

@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace AppChat.Repository
 {
-        #region Interface
-    public async partial interface IBaseRepository<T> where T : class, new()
+    #region Interface
+    public partial interface IBaseRepository<T> where T : class, new()
     {
         #region 方法：插入数据 + object InsertAsync(T entity, bool isIdentity = true)
         /// <summary>
@@ -23,14 +23,14 @@ namespace AppChat.Repository
 
         #endregion
 
-        #region 方法：批量插入数据 + List<object> InsertRange(Task<List<T>> entites, bool isIdentity = true)
+        #region 方法：批量插入数据 + List<object> InsertRange(List<T> entites, bool isIdentity = true)
         /// <summary>
         /// 批量插入数据
         /// </summary>
         /// <param name="entites">实体集合</param>
         /// <param name="isIdentity">是否包含主键</param>
         /// <returns></returns>
-        Task<List<object>> InsertRangeAsync(Task<List<T>> entites, bool isIdentity = true);
+        Task<List<object>> InsertRangeAsync(List<T> entites, bool isIdentity = true);
         #endregion
 
         #region 方法：更新实体所有的列 + bool Update(T model)
@@ -318,7 +318,7 @@ namespace AppChat.Repository
     #endregion
 
     #region Method
-    public async partial class BaseRepository<T> : IBaseRepository<T> where T : class, new()
+    public partial class BaseRepository<T> : IBaseRepository<T> where T : class, new()
     {
         #region 方法：插入数据 + public async Task<object> InsertAsync(T entity, bool isIdentity = true)
         /// <summary>
@@ -329,49 +329,45 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<object> InsertAsync(T entity, bool isIdentity = true)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Insert<T>(entity, isIdentity);
-                }
-            });
+                return dbClient.Insert<T>(entity, isIdentity);
+            }
+
         }
         #endregion
 
         #region 方法：批量插入数据 + public async List<object> InsertRangeAsync(List<T> entites, bool isIdentity = true)
-        /// <returns></returns>
         public async Task<List<object>> InsertRangeAsync(List<T> entites, bool isIdentity = true)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
+                try
                 {
-                    try
-                    {
-                        dbClient.BeginTran();
-                        return dbClient.InsertRange<T>(entites, isIdentity);
-                    }
-                    catch (Exception ex)
-                    {
-                        dbClient.RollbackTran();
-                        throw ex;
-                    }
+                    dbClient.BeginTran();
+                    return dbClient.InsertRange<T>(entites, isIdentity);
                 }
-            });
+                catch (Exception ex)
+                {
+                    dbClient.RollbackTran();
+                    throw ex;
+                }
+            }
+
         }
         #endregion
 
         #region 方法：更新实体所有的列 + public async bool Update(T model)
         public async Task<bool> UpdateAsync(T model)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Update(model);
-                }
-            });
+                return dbClient.Update(model);
+            }
+
         }
         #endregion
 
@@ -385,22 +381,21 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<bool> UpdateAsync<FiledType>(object model, params FiledType[] whereIn)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
+                try
                 {
-                    try
-                    {
-                        dbClient.BeginTran();
-                        return dbClient.Update<T, FiledType>(model, whereIn);
-                    }
-                    catch (Exception ex)
-                    {
-                        dbClient.RollbackTran();
-                        throw ex;
-                    }
+                    dbClient.BeginTran();
+                    return dbClient.Update<T, FiledType>(model, whereIn);
                 }
-            });
+                catch (Exception ex)
+                {
+                    dbClient.RollbackTran();
+                    throw ex;
+                }
+            }
+
         }
         #endregion
 
@@ -413,22 +408,21 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<bool> UpdateAsync(object model, Expression<Func<T, bool>> expression)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
+                try
                 {
-                    try
-                    {
-                        dbClient.BeginTran();
-                        return dbClient.Update<T>(model, expression);
-                    }
-                    catch (Exception ex)
-                    {
-                        dbClient.RollbackTran();
-                        throw ex;
-                    }
+                    dbClient.BeginTran();
+                    return dbClient.Update<T>(model, expression);
                 }
-            });
+                catch (Exception ex)
+                {
+                    dbClient.RollbackTran();
+                    throw ex;
+                }
+            }
+
         }
         #endregion
 
@@ -441,22 +435,21 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<bool> DeleteAsync<FiledType>(params FiledType[] whereIn)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
+                try
                 {
-                    try
-                    {
-                        dbClient.BeginTran();
-                        return dbClient.Delete<T, FiledType>(whereIn);
-                    }
-                    catch (Exception ex)
-                    {
-                        dbClient.RollbackTran();
-                        throw ex;
-                    }
+                    dbClient.BeginTran();
+                    return dbClient.Delete<T, FiledType>(whereIn);
                 }
-            });
+                catch (Exception ex)
+                {
+                    dbClient.RollbackTran();
+                    throw ex;
+                }
+            }
+
         }
         #endregion
 
@@ -468,22 +461,21 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<bool> DeleteAsync(Expression<Func<T, bool>> expression)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
+                try
                 {
-                    try
-                    {
-                        dbClient.BeginTran();
-                        return dbClient.Delete<T>(expression);
-                    }
-                    catch (Exception ex)
-                    {
-                        dbClient.RollbackTran();
-                        throw ex;
-                    }
+                    dbClient.BeginTran();
+                    return dbClient.Delete<T>(expression);
                 }
-            });
+                catch (Exception ex)
+                {
+                    dbClient.RollbackTran();
+                    throw ex;
+                }
+            }
+
         }
         #endregion
 
@@ -497,22 +489,21 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<bool> FalseDeleteAsync<FiledType>(string filed, params FiledType[] whereIn)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
+                try
                 {
-                    try
-                    {
-                        dbClient.BeginTran();
-                        return dbClient.FalseDelete<T, FiledType>(filed, whereIn);
-                    }
-                    catch (Exception ex)
-                    {
-                        dbClient.RollbackTran();
-                        throw ex;
-                    }
+                    dbClient.BeginTran();
+                    return dbClient.FalseDelete<T, FiledType>(filed, whereIn);
                 }
-            });
+                catch (Exception ex)
+                {
+                    dbClient.RollbackTran();
+                    throw ex;
+                }
+            }
+
         }
         #endregion
 
@@ -525,22 +516,21 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<bool> FalseDeleteAsync(string filed, Expression<Func<T, bool>> expression)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
+                try
                 {
-                    try
-                    {
-                        dbClient.BeginTran();
-                        return dbClient.FalseDelete<T>(filed, expression);
-                    }
-                    catch (Exception ex)
-                    {
-                        dbClient.RollbackTran();
-                        throw ex;
-                    }
+                    dbClient.BeginTran();
+                    return dbClient.FalseDelete<T>(filed, expression);
                 }
-            });
+                catch (Exception ex)
+                {
+                    dbClient.RollbackTran();
+                    throw ex;
+                }
+            }
+
         }
         #endregion
 
@@ -551,13 +541,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<T> QuerySingleAsync()
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Single();
-                }
-            });
+                return dbClient.Queryable<T>().Single();
+            }
+
         }
         #endregion
 
@@ -569,13 +558,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<T> QuerySingleAsync(Expression<Func<T, bool>> expression)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Single(expression);
-                }
-            });
+                return dbClient.Queryable<T>().FirstOrDefault(expression);
+            }
+
         }
         #endregion
 
@@ -586,13 +574,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<List<T>> QueryAllAsync()
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().ToList();
-                }
-            });
+                return dbClient.Queryable<T>().ToList();
+            }
+
         }
         #endregion
 
@@ -605,13 +592,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<List<T>> QueryByWhereAsync(Expression<Func<T, bool>> whereExpression, string orderbyStr)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).OrderBy(orderbyStr).ToList();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).OrderBy(orderbyStr).ToList();
+            }
+
         }
         #endregion
 
@@ -623,13 +609,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<List<T>> QueryByWhereAsync(Expression<Func<T, bool>> whereExpression)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).ToList();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).ToList();
+            }
+
         }
         #endregion
 
@@ -644,13 +629,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<List<T>> QueryByWhereAsync(Expression<Func<T, bool>> whereExpression, string orderbyStr, string whereString = "1=1", object whereObj = null)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).Where(whereString, whereObj).OrderBy(orderbyStr).ToList();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).Where(whereString, whereObj).OrderBy(orderbyStr).ToList();
+            }
+
         }
         #endregion
 
@@ -665,13 +649,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<List<T>> QueryByWherePageAsync(int pageIndex, int pageSize, Expression<Func<T, bool>> whereExpression, string orderbyStr)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).OrderBy(orderbyStr).ToPageList(pageIndex, pageSize);
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).OrderBy(orderbyStr).ToPageList(pageIndex, pageSize);
+            }
+
         }
         #endregion
 
@@ -688,13 +671,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<List<T>> QueryByWherePageAsync(int pageIndex, int pageSize, Expression<Func<T, bool>> whereExpression, string orderbyStr, string whereString = "1=1", object whereObj = null)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).Where(whereString, whereObj).OrderBy(orderbyStr).ToPageList(pageIndex, pageSize);
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).Where(whereString, whereObj).OrderBy(orderbyStr).ToPageList(pageIndex, pageSize);
+            }
+
         }
         #endregion
 
@@ -709,13 +691,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<List<T>> QueryByRangeAsync(int skipNum, int takeNum, Expression<Func<T, bool>> whereExpression, string orderbyStr)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).OrderBy(orderbyStr).Skip(skipNum).Take(takeNum).ToList();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).OrderBy(orderbyStr).Skip(skipNum).Take(takeNum).ToList();
+            }
+
         }
         #endregion
 
@@ -729,13 +710,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<List<T>> QuerySkipfterIndexAsync(int skipNum, Expression<Func<T, bool>> whereExpression, string orderbyStr)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).OrderBy(orderbyStr).Skip(skipNum).ToList();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).OrderBy(orderbyStr).Skip(skipNum).ToList();
+            }
+
         }
         #endregion
 
@@ -749,13 +729,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<List<T>> QueryTakeIndexAsync(int takeNum, Expression<Func<T, bool>> whereExpression, string orderbyStr)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).OrderBy(orderbyStr).Take(takeNum).ToList();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).OrderBy(orderbyStr).Take(takeNum).ToList();
+            }
+
         }
         #endregion
 
@@ -767,13 +746,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<int> QueryCountAsync(Expression<Func<T, bool>> whereExpression)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).Count();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).Count();
+            }
+
         }
         #endregion
 
@@ -785,13 +763,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> whereExpression)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Any(whereExpression);
-                }
-            });
+                return dbClient.Queryable<T>().Any(whereExpression);
+            }
+
         }
         #endregion
 
@@ -807,13 +784,12 @@ namespace AppChat.Repository
         /// <returns></returns>
         public async Task<List<TResult>> QueryByGroupAsync<TResult>(string groupbyFiles, string selectStr, Expression<Func<T, bool>> whereExpression, string orderbyStr)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).GroupBy(groupbyFiles).Select<T, TResult>(selectStr).OrderBy(orderbyStr).ToList();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).GroupBy(groupbyFiles).Select<T, TResult>(selectStr).OrderBy(orderbyStr).ToList();
+            }
+
         }
         #endregion
 
@@ -821,13 +797,12 @@ namespace AppChat.Repository
 
         public async Task<List<TResult>> QueryByGroupAsync<TResult>(string groupbyFiles, string selectStr, Expression<Func<T, bool>> whereExpression, string orderbyStr, string whereString = "1=1", object whereObj = null)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).Where(whereString, whereObj).GroupBy(groupbyFiles).Select<T, TResult>(selectStr).OrderBy(orderbyStr).ToList();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).Where(whereString, whereObj).GroupBy(groupbyFiles).Select<T, TResult>(selectStr).OrderBy(orderbyStr).ToList();
+            }
+
         }
         #endregion
 
@@ -835,13 +810,12 @@ namespace AppChat.Repository
 
         public async Task<List<TResult>> QueryByGroupAsync<TResult>(string groupbyFiles, Expression<Func<T, TResult>> selectExpression, Expression<Func<T, bool>> whereExpression, string orderbyStr)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).GroupBy(groupbyFiles).Select<T, TResult>(selectExpression).OrderBy(orderbyStr).ToList();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).GroupBy(groupbyFiles).Select<T, TResult>(selectExpression).OrderBy(orderbyStr).ToList();
+            }
+
         }
         #endregion
 
@@ -849,13 +823,12 @@ namespace AppChat.Repository
 
         public async Task<List<TResult>> QueryByGroupAsync<TResult>(string groupbyFiles, Expression<Func<T, TResult>> selectExpression, Expression<Func<T, bool>> whereExpression, string orderbyStr, string whereString = "1=1", object whereObj = null)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.Queryable<T>().Where(whereExpression).Where(whereString, whereObj).GroupBy(groupbyFiles).Select<T, TResult>(selectExpression).OrderBy(orderbyStr).ToList();
-                }
-            });
+                return dbClient.Queryable<T>().Where(whereExpression).Where(whereString, whereObj).GroupBy(groupbyFiles).Select<T, TResult>(selectExpression).OrderBy(orderbyStr).ToList();
+            }
+
         }
         #endregion
 
@@ -863,13 +836,12 @@ namespace AppChat.Repository
 
         public async Task<List<TResult>> QueryBySqlAsync<TResult>(string sql, object whereObj = null)
         {
-            return await Task.Run(() =>
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
-                {
-                    return dbClient.SqlQuery<TResult>(sql, whereObj);
-                }
-            });
+                return dbClient.SqlQuery<TResult>(sql, whereObj);
+            }
+
         }
         #endregion
 
@@ -877,23 +849,22 @@ namespace AppChat.Repository
 
         public async Task<List<TResult>> QueryBySqlTransactionsAsync<TResult>(string sql, object whereObj = null)
         {
-            return await Task.Run(()=> 
+            await Task.Yield();
+            using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
             {
-                using (SqlSugarClient dbClient = SqlSugarInstance.GetInstance())
+                try
                 {
-                    try
-                    {
-                        dbClient.BeginTran();
-                        return dbClient.SqlQuery<TResult>(sql, whereObj);
-                    }
-                    catch (Exception ex)
-                    {
-                        dbClient.RollbackTran();
-                        throw ex;
-                    }
+                    dbClient.BeginTran();
+                    return dbClient.SqlQuery<TResult>(sql, whereObj);
                 }
-            });
-            
+                catch (Exception ex)
+                {
+                    dbClient.RollbackTran();
+                    throw ex;
+                }
+            }
+
+
         }
         #endregion
 

@@ -51,22 +51,22 @@ namespace AppChat.Service.User
         /// <param name="loginPwd"></param>
         /// <param name="nickName"></param>
         /// <returns></returns>
-        public Task<JsonResultModel> UserLoginOrRegister(string loginName, string loginPwd, out int userid)
+        public JsonResultModel UserLoginOrRegister(string loginName, string loginPwd, out int userid)
         {
             userid = 0;
             var wrongNameOrPwdFlag = -1;
             if (string.IsNullOrEmpty(loginName) || string.IsNullOrEmpty(loginPwd))
             {
-                return JsonResultHelper.CreateJsonAsync(new { userid = wrongNameOrPwdFlag });
+                return JsonResultHelper.CreateJson(new { userid = wrongNameOrPwdFlag });
             }
             //TODO:判断用户是否存在,存在就获取信息 done
             var loginUser = _user.QuerySingle(x => x.loginname == loginName && x.loginpwd == loginPwd);
 
             if (loginUser != null)
             {
-                return JsonResultHelper.CreateJsonAsync(new { userid = loginUser.id });
+                return JsonResultHelper.CreateJson(new { userid = loginUser });
             }
-            return JsonResultHelper.CreateJsonAsync(false);
+            return JsonResultHelper.CreateJson(false);
 
         }
         #endregion

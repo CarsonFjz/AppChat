@@ -53,6 +53,7 @@
     <Compile Include="Extension\DateTimeExtension.cs" />
     <Compile Include="Extension\ObjectExtension.cs" />
     <Compile Include="FileUpload\FileUploadHelper.cs" />
+    <Compile Include="Guids\CreateGuid.cs" />
     <Compile Include="JsonResult\JsonResultHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Random\RandomHelper.cs" />
