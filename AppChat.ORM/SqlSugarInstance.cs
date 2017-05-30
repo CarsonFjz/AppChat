@@ -21,7 +21,11 @@ namespace AppChat.ORM
         /// <returns>SqlSugarClient</returns>
         public static SqlSugarClient GetInstance()
         {
-            string connection = AppSettings.AppSettingConfig.SqlConnection;
+            var connection = new ConnectionConfig()
+            {
+                ConnectionString = AppSettingConfig.SqlConnection,
+                DbType = DbType.SqlServer
+            };
 
             SqlSugarClient _SqlSugarClient = new SqlSugarClient(connection);
 

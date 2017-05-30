@@ -15,8 +15,8 @@ namespace AppChat.Model.ViewModel
         public string PrimaryKey { get; set; }
         public string Fields { get; set; }
         public string Condition { get; set; }
-        public int PageIndex { get; set; } = 1;
-        public int PageSize { get; set; } = 20;
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
         public string Sort { get; set; }
     }
 }

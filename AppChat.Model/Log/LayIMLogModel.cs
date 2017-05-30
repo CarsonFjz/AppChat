@@ -14,7 +14,7 @@ namespace AppChat.Model.Log
         /// <summary>
         /// 日志创建时间
         /// </summary>
-        public DateTime CreateTime { get; set; } = DateTime.Now;
+        public DateTime CreateTime { get; set; }
         public string Message { get; set; }
         public Exception Exception { get; set; }
         public bool IsExceptionLog { get { return Exception != null; } }

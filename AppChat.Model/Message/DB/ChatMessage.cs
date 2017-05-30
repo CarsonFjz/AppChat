@@ -14,6 +14,6 @@ namespace AppChat.Model.Message.DB
         public string Msg { get; set; }
         public short ChatType { get; set; }
         public int AddTime { get; set; }
-        public short MsgType { get; set; } = 0;
+        public short MsgType { get; set; }
     }
 }
