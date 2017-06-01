@@ -19,7 +19,7 @@ namespace AppChat.ORM
         /// 获取Sugar客户端实例对象
         /// </summary>
         /// <returns>SqlSugarClient</returns>
-        public static SqlSugarClient GetInstance()
+        public static SqlSugarClient GetInstance(ConnectionConfig connection)
         {
             var connection = new ConnectionConfig()
             {

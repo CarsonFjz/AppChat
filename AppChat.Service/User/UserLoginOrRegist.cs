@@ -1,11 +1,13 @@
 ﻿using AppChat.Cache;
 using AppChat.Model;
+using AppChat.Model.Convert;
 using AppChat.Model.Core;
 using AppChat.Model.Message;
-using AppChat.Repository;
+using AppChat.Service._Interface;
 using AppChat.Service.Group;
 using AppChat.Utils.Extension;
 using AppChat.Utils.JsonResult;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,34 +16,17 @@ using System.Threading.Tasks;
 
 namespace AppChat.Service.User
 {
-    public interface IUserLoginOrRegist
-    {
-    }
-    public class UserLoginOrRegist : IUserLoginOrRegist
+    public class UserLoginOrRegist : IUser
     {
         private IRedisCache _redisCache;
         private IElasticGroupService _elastic;
-        private IBaseRepository<layim_user> _user;
-        private IBaseRepository<ApplyMessage> _applyMessage;
-        private IBaseRepository<layim_friend_group_detail> _friendGroup;
-        private IBaseRepository<v_layim_friend_group_detail_info> _friendListInfo;
-        public UserLoginOrRegist(IRedisCache redisCache,
-                           IElasticGroupService elastic,
-                           IBaseRepository<layim_user> user,
-                           IBaseRepository<ApplyMessage> applyMessage,
-                           IBaseRepository<layim_friend_group_detail> friendGroup,
-                           IBaseRepository<v_layim_friend_group_detail_info> friendListInfo)
+        private SqlSugarClient _context;
+        public UserLoginOrRegist(IRedisCache redisCache,IElasticGroupService elastic, SqlSugarClient context)
         {
             _redisCache = redisCache;
             _elastic = elastic;
-            _user = user;
-            _applyMessage = applyMessage;
-            _friendListInfo = friendListInfo;
-            _friendGroup = friendGroup;
+            _context = context;
         }
-
-
-        //----------------------------------初始化用户登录star--------------------------------------
 
         #region 用户登录流程
         /// <summary>
@@ -60,7 +45,7 @@ namespace AppChat.Service.User
                 return JsonResultHelper.CreateJson(new { userid = wrongNameOrPwdFlag });
             }
             //TODO:判断用户是否存在,存在就获取信息 done
-            var loginUser = _user.QuerySingle(x => x.loginname == loginName && x.loginpwd == loginPwd);
+            var loginUser = _context.Queryable<layim_user>().Where(x => x.loginname == loginName && x.loginpwd == loginPwd).ToList();
 
             if (loginUser != null)
             {
@@ -85,7 +70,7 @@ namespace AppChat.Service.User
             if (friends.Count == 0)
             {
                 //从数据库读取，在保存到缓存中
-                var friendList = await _friendListInfo.QueryByWhereAsync(x => x.userid == userid);
+                var friendList = _context.Queryable<v_layim_friend_group_detail_info>().Where(x => x.userid == userid).ToList();
 
                 StringBuilder friendStr = new StringBuilder();
 
@@ -102,27 +87,23 @@ namespace AppChat.Service.User
         #region 获取用户有关的消息
         public async Task<JsonResultModel> GetUserApplyMessage(int userid)
         {
-            string procName = "exec Proc_LayIM_GetUserApplyRecord @userid";
-
-            var userMessageResult = await _applyMessage.QueryBySqlAsync<ApplyMessage>(procName, new { userid = userid });
-
-            foreach (var item in userMessageResult)
-            {
-                item.isself = userid == item.userid;
-                item.addtime = item.addtime.ToDateTime().ToString("yyyy/MM/dd HH:mm");
-            }
+            var userMessageResult = _context.Queryable<v_layim_apply>()
+                                            .Where(x => x.targetid == userid.ToString() || x.userid == userid)
+                                            .OrderBy(x=>x.applytime,OrderByType.Desc)
+                                            .ToList().Convert(userid);
 
             return await JsonResultHelper.CreateJsonAsync(userMessageResult, true);
         }
         #endregion
 
         #region 读取用户所在的群
-        public Task<List<layim_friend_group_detail>> GetUserAllGroups(string userId)
+        public async Task<JsonResultModel> GetUserAllGroups(int userId)
         {
-            return _friendGroup.QueryByWhereAsync(x => x.uid == Convert.ToInt32(userId));
+            var userGroupResult = _context.Queryable<layim_friend_group_detail>().Where(x => x.uid == userId).ToList();
+
+            return await JsonResultHelper.CreateJsonAsync(userGroupResult, true);
         }
         #endregion
 
-        //----------------------------------初始化用户登录end--------------------------------------
     }
 }

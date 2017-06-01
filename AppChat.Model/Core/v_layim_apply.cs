@@ -75,7 +75,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public Byte result {get;set;}
+        public byte result {get;set;}
 
     }
 }

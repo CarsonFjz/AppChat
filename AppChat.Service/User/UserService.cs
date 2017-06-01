@@ -3,6 +3,7 @@ using AppChat.ElasticSearch.Core;
 using AppChat.ElasticSearch.Model;
 using AppChat.ElasticSearch.Models;
 using AppChat.Model;
+using AppChat.Model.Convert;
 using AppChat.Model.Core;
 using AppChat.Model.Message;
 using AppChat.Repository;
@@ -12,6 +13,7 @@ using AppChat.Utils.Extension;
 using AppChat.Utils.JsonResult;
 using AppChat.Utils.Random;
 using AppChat.Utils.Validate;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,37 +30,26 @@ namespace AppChat.Service.User
     {
         private IRedisCache _redisCacheService;
         private IElasticGroupService _elasticService;
+        private SqlSugarClient _context;
         private IBaseRepository<layim_user> _userService;
         private IBaseRepository<ApplyMessage> _applyMessageService;
         private IBaseRepository<v_group_detail> _groupListService;
         private IBaseRepository<v_layim_friend_group> _friendListService;
         private IBaseRepository<v_layim_friend_group_detail> _friendDetailListService;
-        public UserService(IRedisCache redisCacheService, 
-                           IElasticGroupService elasticService,
-                           IBaseRepository<layim_user> userService,
-                           IBaseRepository<ApplyMessage> applyMessageService,
-                           IBaseRepository<v_group_detail> groupListService,
-                           IBaseRepository<v_layim_friend_group> friendListService,
-                           IBaseRepository<v_layim_friend_group_detail> friendDetailListService)
+        public UserService(IRedisCache redisCacheService, IElasticGroupService elasticService,SqlSugarClient context)
         {
             _redisCacheService = redisCacheService;
             _elasticService = elasticService;
-            _userService = userService;
-            _applyMessageService = applyMessageService;
-            _groupListService = groupListService;
-            _friendListService = friendListService;
-            _friendDetailListService = friendDetailListService;
+            _context = context;
         }
 
-        #region 获取用户登录聊天室后的基本信息
-
-        
+        #region 获取用户登录聊天室后的基本信息 
         public async Task<JsonResultModel> GetChatRoomBaseInfo(int userid)
         {
             if (userid == 0) { throw new ArgumentException("userid can't be zero"); }
 
             #region 1.0 当前用户信息
-            var mine = await _userService.QuerySingleAsync(x => x.id == userid);
+            var mine = _context.Queryable<layim_user>().Where(x => x.id == userid).Single();
 
             var mineModel = new UserEntity
             {
@@ -72,13 +63,14 @@ namespace AppChat.Service.User
 
             #region 2.0 好友信息
             //2.1 获取好友用户组
-            var friendGroup = await _friendListService.QueryByWhereAsync(x => x.userid == userid, "sort");
+            var friendGroup = _context.Queryable<v_layim_friend_group>().Where(x => x.userid == userid).OrderBy(x => x.sort).ToList();
             //2.2 把用户组id取出来
             var friendGroupIdList = friendGroup.Select(x => x.id);
             //2.3 找出每个用户组下所有好友信息
-            var friendList = _friendDetailListService.QueryByInAsync(x => x.gid);
+            var friendList = _context.Queryable<v_layim_friend_group_detail>().In<Guid>(x => x.gid).ToList();
 
-            var friendGroupModel = friendGroup.Select(x => new FriendGroupEntity() {
+            var friendGroupModel = friendGroup.Select(x => new FriendGroupEntity()
+            {
                 id = x.id,
                 groupname = x.name,
                 online = 0,
@@ -94,16 +86,16 @@ namespace AppChat.Service.User
                     status = _redisCacheService.IsOnline(y.uid) ? "online" : "hide"
                 }).OrderByDescending(y => y.status)
             });
+
             #endregion
 
-
-            #region 3.群信息
+            #region 3.0群信息
             //var group = await _groupListService. 
             #endregion
             BaseListResult result = new BaseListResult
             {
                 mine = mineModel,
-                friend = friendGroupModel,
+                friend = friendGroupModel
             };
             return await JsonResultHelper.CreateJsonAsync(result, result != null);
         }

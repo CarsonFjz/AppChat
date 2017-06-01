@@ -73,6 +73,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User\UserLoginOrRegist.cs" />
     <Compile Include="User\UserService.cs" />
+    <Compile Include="_Interface\IUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppChat.Cache\AppChat.Cache.csproj">
@@ -87,9 +88,9 @@
       <Project>{0aae7a54-1f23-49aa-a3ba-b03d1e399346}</Project>
       <Name>AppChat.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AppChat.Repository\AppChat.Repository.csproj">
-      <Project>{51F42156-DAB0-4954-AF69-CD666138BA7B}</Project>
-      <Name>AppChat.Repository</Name>
+    <ProjectReference Include="..\AppChat.ORM\AppChat.ORM.csproj">
+      <Project>{379086EC-35D6-4E93-97D3-7543BF4398F8}</Project>
+      <Name>AppChat.ORM</Name>
     </ProjectReference>
     <ProjectReference Include="..\AppChat.Utils\AppChat.Utils.csproj">
       <Project>{1366E83A-EAD1-4DE4-BC80-523F15BB42B9}</Project>
