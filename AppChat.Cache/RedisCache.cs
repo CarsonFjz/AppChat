@@ -40,12 +40,12 @@ namespace AppChat.Cache
 
         #region 获取当前登录用户的用户id
 
-        public async Task<string> GetCurrentUserId(HttpContextBase contextBase = null)
+        public string GetCurrentUserId(HttpContextBase contextBase = null)
         {
             var key = LayIMConst.LayIM_Cache_UserLoginToken;
             string token = CookieHelper.GetCookieValue(key, contextBase);
             //TODO: cookie为空情况还没有处理
-            return await cacheClient.HashGetAsync<string>(key, token);
+            return cacheClient.HashGetAsync<string>(key, token).Result;
         }
         #endregion
 

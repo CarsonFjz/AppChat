@@ -16,14 +16,14 @@ namespace AppChat.Service
         /// <param name="to"></param>
         /// <returns></returns>
         string CreateName(int from, int to);
-        string CreateName(int gid);
+        string CreateName(Guid gid);
     }
     #endregion
 
     #region Method
     public class CreateGroupService : ICreateGroupService
     {
-        public string CreateName(int gid)
+        public string CreateName(Guid gid)
         {
             throw new NotImplementedException();
         }

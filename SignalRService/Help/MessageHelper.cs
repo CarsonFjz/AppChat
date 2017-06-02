@@ -7,13 +7,14 @@ using AppChat.Model.Enum;
 using AppChat.Utils.Extension;
 using AppChat.Service.User;
 using AppChat.Service;
+using AppChat.Service._Interface;
 
 namespace AppChat.SignalRHostSelf.Help
 {
     public interface IMessageHelper
     {
         void SendMessage(object message, string userId, ChatToClientType type, bool moreUser = false);
-        void SendMessage(string userName, int groupId);
+        void SendMessage(string userName, Guid groupId);
         void SendMessage(ApplyHandledMessgae message);
         void SendUserOnOffLineMessage(string userId, bool online = true);
 
@@ -69,7 +70,7 @@ namespace AppChat.SignalRHostSelf.Help
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="groupId"></param>
-        public void SendMessage(string userName, int groupId)
+        public void SendMessage(string userName, Guid groupId)
         {
             //构造消息体
             ToClientMessageResult result = new ToClientMessageResult

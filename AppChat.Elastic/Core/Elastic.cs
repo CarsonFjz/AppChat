@@ -82,21 +82,14 @@ namespace AppChat.ElasticSearch.Core
 
         public T QuerySingle(string id)
         {
-            try
+            string getCommand = new GetCommand(_indexInfo.IndexName, _indexInfo.IndexType, id);
+            OperationResult result = Client.Get(getCommand);
+            var getResult = serializer.ToGetResult<T>(result.Result);
+            if (getResult.found)
             {
-                string getCommand = new GetCommand(_indexInfo.IndexName, _indexInfo.IndexType, id);
-                OperationResult result = Client.Get(getCommand);
-                var getResult = serializer.ToGetResult<T>(result.Result);
-                if (getResult.found)
-                {
-                    return getResult.Document;
-                }
-                return null;
+                return getResult.Document;
             }
-            catch (OperationException ex)
-            {
-                return null;
-            }
+            return null;
         }
         #endregion
 
@@ -395,7 +388,7 @@ namespace AppChat.ElasticSearch.Core
         #endregion
     }
 
-    
+
     /// <summary>
     /// 批量操作类型
     /// </summary>

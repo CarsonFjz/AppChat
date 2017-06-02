@@ -1,6 +1,7 @@
 ﻿using AppChat.Cache;
 using AppChat.Model.Online;
 using AppChat.Service;
+using AppChat.Service._Interface;
 using AppChat.Service.User;
 using AppChat.SignalRHostSelf.Help;
 using AppChat.Utils.Extension;

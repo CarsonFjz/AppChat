@@ -105,6 +105,10 @@
       <Project>{1366E83A-EAD1-4DE4-BC80-523F15BB42B9}</Project>
       <Name>AppChat.Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SqlSugar\AppChat.ORM.csproj">
+      <Project>{489BB790-226C-4FAD-8D1E-51D72A7FF8E5}</Project>
+      <Name>AppChat.ORM</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppChat.Api.Tests", "AppCha
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ORM", "ORM", "{D73C2FB6-531C-4D7C-9D54-26EC9E3C930A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSugar", "SqlSugar\SqlSugar.csproj", "{489BB790-226C-4FAD-8D1E-51D72A7FF8E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppChat.ORM", "SqlSugar\AppChat.ORM.csproj", "{489BB790-226C-4FAD-8D1E-51D72A7FF8E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
