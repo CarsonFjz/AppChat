@@ -1,5 +1,6 @@
-﻿using AppChat.Model;
-using AppChat.Model.Core;
+﻿using AppChat.ElasticSearch.Model;
+using AppChat.ElasticSearch.Models;
+using AppChat.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,9 @@ namespace AppChat.Service._Interface
 {
     public interface IUserService
     {
-
-        #region 用户注册或者登陆
-        JsonResultModel UserLoginOrRegister(string loginName, string loginPwd, out int userid);
-        Task<List<v_layim_friend_group_detail_info>> GetUserFriends(int userid);
-        Task<JsonResultModel> GetUserApplyMessage(int userid);
-        Task<JsonResultModel> GetUserAllGroups(int userId); 
-        #endregion
-
-
+        Task<JsonResultModel> GetChatRoomBaseInfo(int userid);
+        bool IndexUserInfo(LayImUser user);
+        JsonResultModel SearchLayImUsers(string keyword, int pageIndex = 1, int pageSize = 50);
+        JsonResultModel SearchHistoryMsg(string groupId, DateTime? starttime = null, DateTime? endtime = null, string keyword = null, bool isfile = false, bool isimg = false, int pageIndex = 1, int pageSize = 20);
     }
 }

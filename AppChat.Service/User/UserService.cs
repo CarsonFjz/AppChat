@@ -1,46 +1,44 @@
 ﻿using AppChat.Cache;
 using AppChat.ElasticSearch.Core;
+using AppChat.ElasticSearch.Ext;
 using AppChat.ElasticSearch.Model;
 using AppChat.ElasticSearch.Models;
 using AppChat.Model;
-using AppChat.Model.Convert;
 using AppChat.Model.Core;
-using AppChat.Model.Message;
-using AppChat.Repository;
-using AppChat.Service.Group;
-using AppChat.Utils.Consts;
+using AppChat.Service._Interface;
 using AppChat.Utils.Extension;
 using AppChat.Utils.JsonResult;
-using AppChat.Utils.Random;
 using AppChat.Utils.Validate;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AppChat.Service.User
 {
-    public interface IUserService
-    {
-    }
     public class UserService : IUserService
     {
         private IRedisCache _redisCacheService;
-        private IElasticGroupService _elasticService;
+        private IElastic<LayImUser> _elasticUserService;
+        private IElasticChat _elasticChatService;
         private SqlSugarClient _context;
-        private IBaseRepository<layim_user> _userService;
-        private IBaseRepository<ApplyMessage> _applyMessageService;
-        private IBaseRepository<v_group_detail> _groupListService;
-        private IBaseRepository<v_layim_friend_group> _friendListService;
-        private IBaseRepository<v_layim_friend_group_detail> _friendDetailListService;
-        public UserService(IRedisCache redisCacheService, IElasticGroupService elasticService,SqlSugarClient context)
+        //private IBaseRepository<layim_user> _userService;
+        //private IBaseRepository<ApplyMessage> _applyMessageService;
+        //private IBaseRepository<v_group_detail> _groupListService;
+        //private IBaseRepository<v_layim_friend_group> _friendListService;
+        //private IBaseRepository<v_layim_friend_group_detail> _friendDetailListService;
+        public UserService(IRedisCache redisCacheService, IElastic<LayImUser> elasticService, IElasticChat elasticChatService, SqlSugarClient context)
         {
             _redisCacheService = redisCacheService;
-            _elasticService = elasticService;
+            _elasticUserService = elasticService;
+            _elasticChatService = elasticChatService;
             _context = context;
+
+            //设置索引关键词
+            _elasticUserService.SetIndexInfo("layim", "layim_user");
+            _elasticChatService.SetIndexInfo("layim", "chatinfo");
         }
 
         #region 获取用户登录聊天室后的基本信息 
@@ -102,83 +100,81 @@ namespace AppChat.Service.User
         }
         #endregion
 
-        #region 获取群组人员信息
-        public JsonResultModel GetGroupMembers(int groupid)
-        {
-            var ds = _dal.GetGroupMembers(groupid);
-            if (ds != null)
-            {
-                var rowOwner = ds.Tables[0].Rows[0];
-                MembersListResult result = new MembersListResult
-                {
-                    owner = new UserEntity
-                    {
-                        id = rowOwner["userid"].ToInt(),
-                        avatar = rowOwner["avatar"].ToString(),
-                        username = rowOwner["username"].ToString(),
-                        sign = rowOwner["sign"].ToString(),
-                    },
-                    list = ds.Tables[1].Rows.Cast<DataRow>().Select(x => new GroupUserEntity
-                    {
-                        id = x["userid"].ToInt(),
-                        avatar = x["avatar"].ToString(),
-                        groupid = groupid,
-                        remarkname = x["remarkname"].ToString(),
-                        sign = x["sign"].ToString(),
-                        username = x["username"].ToString()
-                    })
-                };
-                return JsonResultHelper.CreateJson(result);
-            }
-            return JsonResultHelper.CreateJson(null, false);
-        }
-        #endregion
+        //#region 获取群组人员信息
+        //public JsonResultModel GetGroupMembers(int groupid)
+        //{
+        //    var ds = _dal.GetGroupMembers(groupid);
+        //    if (ds != null)
+        //    {
+        //        var rowOwner = ds.Tables[0].Rows[0];
+        //        MembersListResult result = new MembersListResult
+        //        {
+        //            owner = new UserEntity
+        //            {
+        //                id = rowOwner["userid"].ToInt(),
+        //                avatar = rowOwner["avatar"].ToString(),
+        //                username = rowOwner["username"].ToString(),
+        //                sign = rowOwner["sign"].ToString(),
+        //            },
+        //            list = ds.Tables[1].Rows.Cast<DataRow>().Select(x => new GroupUserEntity
+        //            {
+        //                id = x["userid"].ToInt(),
+        //                avatar = x["avatar"].ToString(),
+        //                groupid = groupid,
+        //                remarkname = x["remarkname"].ToString(),
+        //                sign = x["sign"].ToString(),
+        //                username = x["username"].ToString()
+        //            })
+        //        };
+        //        return JsonResultHelper.CreateJson(result);
+        //    }
+        //    return JsonResultHelper.CreateJson(null, false);
+        //}
+        //#endregion
 
-        #region 用户创建群
-        public JsonResultModel CreateGroup(string groupName, string groupDesc, int userid)
-        {
-            var dt = _dal.CreateGroup(groupName, groupDesc, userid);
-            if (dt != null && dt.Rows.Count == 1)
-            {
-                //同步ES库
+        //#region 用户创建群
+        //public JsonResultModel CreateGroup(string groupName, string groupDesc, int userid)
+        //{
+        //    var dt = _dal.CreateGroup(groupName, groupDesc, userid);
+        //    if (dt != null && dt.Rows.Count == 1)
+        //    {
+        //        //同步ES库
 
-                var group = _elasticService.IndexGroup(dt);
-                var data = GetMessage(group);
-                return JsonResultHelper.CreateJson(data, true);
-            }
-            else
-            {
-                return JsonResultHelper.CreateJson(null, false);
-            }
-        }
+        //        var group = _elasticService.IndexGroup(dt);
+        //        var data = GetMessage(group);
+        //        return JsonResultHelper.CreateJson(data, true);
+        //    }
+        //    else
+        //    {
+        //        return JsonResultHelper.CreateJson(null, false);
+        //    }
+        //}
 
-        private UserGroupCreatedMessage GetMessage(LayImGroup group)
-        {
-            return new UserGroupCreatedMessage
-            {
-                id = group.id.ToInt(),
-                avatar = group.avatar,
-                groupdesc = group.groupdesc,
-                groupname = group.groupname,
-                memebers = group.allcount,
-                type = LayIMConst.LayIMGroupType
-            };
-        }
-        #endregion
+        //private UserGroupCreatedMessage GetMessage(LayImGroup group)
+        //{
+        //    return new UserGroupCreatedMessage
+        //    {
+        //        id = group.id.ToInt(),
+        //        avatar = group.avatar,
+        //        groupdesc = group.groupdesc,
+        //        groupname = group.groupname,
+        //        memebers = group.allcount,
+        //        type = LayIMConst.LayIMGroupType
+        //    };
+        //}
+        //#endregion
+
+        //#region 更换用户皮肤
+        //public bool UpdateUserSkin(int userid, string path)
+        //{
+        //    return _dal.UpdateUserSkin(userid, path);
+        //}
+        //#endregion
 
         #region ES部分，此部分包含查询逻辑，搜索部分都是从ES中搜索，其他都是从SQL中出数据
-        private static Elastic<LayImUser> es
-        {
-            get
-            {
-                var _es = new Elastic<LayImUser>();
-                _es.SetIndexInfo("layim", "layim_user");
-                return _es;
-            }
-        }
         public bool IndexUserInfo(LayImUser user)
         {
-            bool result = es.Index(user);
+            bool result = _elasticUserService.Index(user);
             return result;
         }
 
@@ -207,29 +203,14 @@ namespace AppChat.Service.User
             string term = im == 0 ? "{\"im\":0}" : "{\"im\":" + keyword + "}";
             string queryWithKeyWord = "{\"query\":{\"filtered\":{\"filter\":{\"or\":[{\"term\":" + term + "},{\"query\":{\"match_phrase\":{\"nickname\":{\"query\":\"" + keyword + "\",\"slop\":0}}}}]}}},\"from\":" + from + ",\"size\":" + pageSize + ",\"sort\":{}}";
             string queryFinal = hasvalue ? queryWithKeyWord : queryAll;
-            var result = es.QueryBayConditions(queryFinal);
+            var result = _elasticUserService.QueryBayConditions(queryFinal);
             return result;
         }
 
 
         #endregion
 
-        
-
-        
-
-        #region 读取历史纪录 根据条件 开始时间，结束时间  聊天关键字  组
-
-        private ElasticChat eschat
-        {
-            get
-            {
-                var _es = new ElasticChat();
-                _es.SetIndexInfo("layim", "chatinfo");
-
-                return _es;
-            }
-        }
+        #region ES部分，读取历史纪录 根据条件 开始时间，结束时间  聊天关键字  组
 
         public JsonResultModel SearchHistoryMsg(string groupId, DateTime? starttime = null, DateTime? endtime = null, string keyword = null, bool isfile = false, bool isimg = false, int pageIndex = 1, int pageSize = 20)
         {
@@ -279,18 +260,12 @@ namespace AppChat.Service.User
             string query = "  {\"query\": {\"filtered\": {\"filter\": {\"and\": [" + queryAnd + "] }}},\"from\": " + from + ",\"size\": " + pageSize + ",\"sort\": {\"addtime\": { \"order\": \"asc\"}},\"highlight\": {\"fields\": { \"content\": {}} }}";
 
 
-            var result = eschat.QueryBayConditions(query);
+            var result = _elasticChatService.QueryBayConditions(query);
             return JsonResultHelper.CreateJson(result, true);
         }
+
         #endregion
 
         
-
-        #region 更换用户皮肤
-        public bool UpdateUserSkin(int userid, string path)
-        {
-            return _dal.UpdateUserSkin(userid, path);
-        }
-        #endregion
     }
 }

@@ -60,9 +60,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\..\..\workorder\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -80,7 +84,8 @@
     <Compile Include="User\UserService.cs" />
     <Compile Include="_Interface\IFileUploadService.cs" />
     <Compile Include="_Interface\IFormDataService.cs" />
-    <Compile Include="_Interface\IGroupService.cs" />
+    <Compile Include="_Interface\IElasticGroupService.cs" />
+    <Compile Include="_Interface\IUserLoginOrRegist.cs" />
     <Compile Include="_Interface\IUserService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,10 +100,6 @@
     <ProjectReference Include="..\AppChat.Model\AppChat.Model.csproj">
       <Project>{0aae7a54-1f23-49aa-a3ba-b03d1e399346}</Project>
       <Name>AppChat.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AppChat.ORM\AppChat.ORM.csproj">
-      <Project>{379086EC-35D6-4E93-97D3-7543BF4398F8}</Project>
-      <Name>AppChat.ORM</Name>
     </ProjectReference>
     <ProjectReference Include="..\AppChat.Utils\AppChat.Utils.csproj">
       <Project>{1366E83A-EAD1-4DE4-BC80-523F15BB42B9}</Project>

@@ -18,14 +18,10 @@ namespace AppChat.Service.Group
 {
     public class ElasticGroupService : IElasticGroupService
     {
-        private Elastic<LayImGroup> es
+        private IElastic<LayImGroup> _elasticService;
+        public ElasticGroupService(IElastic<LayImGroup> elasticService)
         {
-            get
-            {
-                var _es = new Elastic<LayImGroup>();
-                _es.SetIndexInfo("layim", "layim_group");
-                return _es;
-            }
+            _elasticService = elasticService;
         }
 
         /// <summary>
@@ -35,7 +31,7 @@ namespace AppChat.Service.Group
         /// <returns></returns>
         public bool IndexGroup(LayImGroup group)
         {
-            return es.Index(group);
+            return _elasticService.Index(group);
         }
 
         public LayImGroup IndexGroup(DataTable dt)
@@ -80,7 +76,7 @@ namespace AppChat.Service.Group
             string term = im == 0 ? "{\"im\":0}" : "{\"im\":" + keyword + "}";
             string queryWithKeyWord = "{\"query\":{\"filtered\":{\"filter\":{\"or\":[{\"term\":" + term + "},{\"query\":{\"match_phrase\":{\"groupname\":{\"query\":\"" + keyword + "\",\"slop\":0}}}}]}}},\"from\":" + from + ",\"size\":" + pageSize + ",\"sort\":{}}}";
             string queryFinal = hasvalue ? queryWithKeyWord : queryAll;
-            var result = es.QueryBayConditions(queryFinal);
+            var result = _elasticService.QueryBayConditions(queryFinal);
             return result;
         }
 

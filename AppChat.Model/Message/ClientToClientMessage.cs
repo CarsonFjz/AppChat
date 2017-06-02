@@ -52,7 +52,7 @@ namespace AppChat.Model.Message
     /// <summary>
     ///   客户端消息不需要那么多字段，这里越少越好，最好和接口的一致
     /// </summary>
-    public class ClientToClientReceivedMessage : AvatarEntity
+    public class ClientToClientReceivedMessage : AvatarGuidEntity
     {
         public int fromid { get; set; }
         public string content { get; set; }

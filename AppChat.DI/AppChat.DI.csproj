@@ -63,10 +63,6 @@
       <Project>{6F200504-3A09-437A-93B8-5A610B420E0B}</Project>
       <Name>AppChat.ElasticSearch</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AppChat.ORM\AppChat.ORM.csproj">
-      <Project>{379086ec-35d6-4e93-97d3-7543bf4398f8}</Project>
-      <Name>AppChat.ORM</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AppChat.Service\AppChat.Service.csproj">
       <Project>{1232FC25-093E-4866-BE60-00D2DD97147C}</Project>
       <Name>AppChat.Service</Name>

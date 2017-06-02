@@ -49,7 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Elastic.cs" />
-    <Compile Include="Core\IElastic.cs" />
+    <Compile Include="Ext\ElasticChat.cs" />
+    <Compile Include="_Interface\IElasticChat.cs" />
+    <Compile Include="_Interface\IElastic.cs" />
     <Compile Include="Models\Models.cs" />
     <Compile Include="Model\BaseEntity.cs" />
     <Compile Include="Model\BaseQueryEntity.cs" />

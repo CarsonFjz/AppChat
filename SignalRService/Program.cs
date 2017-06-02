@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Topshelf;
 
 namespace AppChat.SignalRHostSelf
 {
@@ -11,11 +12,24 @@ namespace AppChat.SignalRHostSelf
     {
         static void Main(string[] args)
         {
-            using (WebApp.Start<Startup>("http://localhost:8050"))
+            HostFactory.Run(x =>
             {
-                Console.WriteLine("Server running ok");
-                Console.ReadLine();
-            }
+                x.Service<SignalRService>(s=> 
+                {
+                    s.ConstructUsing(name => new SignalRService());
+                });
+
+            });
+        }
+    }
+
+    public class SignalRService
+    {
+        public SignalRService()
+        {
+            WebApp.Start<Startup>("http://localhost:8050");
+            Console.WriteLine("Server running ok");
+            Console.ReadLine();
         }
     }
 }

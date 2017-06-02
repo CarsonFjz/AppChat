@@ -33,6 +33,7 @@ namespace AppChat.SignalRHostSelf
             builder.RegisterModule<CacheModule>();
             builder.RegisterModule<ServiceModule>();
             builder.RegisterModule<ElasticModule>();
+            builder.RegisterModule<OrmModule>();
 
             builder.Build();
             #endregion

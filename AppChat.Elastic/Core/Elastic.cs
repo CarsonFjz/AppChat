@@ -9,11 +9,13 @@ using AppChat.ElasticSearch.Model;
 using PlainElastic.Net;
 using PlainElastic.Net.Serialization;
 using PlainElastic.Net.Queries;
+using AppChat.Utils.Config;
+using AppChat.ElasticSearch.Models;
 
 namespace AppChat.ElasticSearch.Core
 {
 
-    public class Elastic<T> where T : BaseEntity,IElastic<T>, new()
+    public class Elastic<T> where T : BaseEntity, new()
     {
         #region 成员变量
 
@@ -39,7 +41,6 @@ namespace AppChat.ElasticSearch.Core
         }
         public Elastic() : this(null, 0)
         {
-
         }
         #endregion
 
@@ -392,8 +393,9 @@ namespace AppChat.ElasticSearch.Core
         #endregion
 
         #endregion
-    } 
+    }
 
+    
     /// <summary>
     /// 批量操作类型
     /// </summary>

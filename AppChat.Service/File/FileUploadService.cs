@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net.Http;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Net;
-using System.Web.Http;
 using AppChat.Service._Interface;
+using System.Web.Http;
 
 namespace AppChat.Service.File
 {
@@ -17,10 +14,10 @@ namespace AppChat.Service.File
         private string date;//按日期分文件夹
         private string host = System.Web.Hosting.HostingEnvironment.MapPath("~/AppData");//根目录
 
-        private const string[] radio = { ".mp3", ".mp4", ".aiff" };
-        private const string[] image = {".jpg",".jpeg",".png",".bmp",".gif" };
-        private const string[] video = {".avi",".mp4",".rmvb",".mpge",".wmv" };
-        private const string[] file =  {".jpg",".jpeg",".png",".doc",".docx",".xls",".xlsx",".ppt",".pptx",".vsd",".vsdx",".pdf",".txt",".zip",".rar" ,".mp3",".mp4",".avi",".rmvb"};
+        private string[] radio = { ".mp3", ".mp4", ".aiff" };
+        private string[] image = {".jpg",".jpeg",".png",".bmp",".gif" };
+        private string[] video = {".avi",".mp4",".rmvb",".mpge",".wmv" };
+        private string[] file =  {".jpg",".jpeg",".png",".doc",".docx",".xls",".xlsx",".ppt",".pptx",".vsd",".vsdx",".pdf",".txt",".zip",".rar" ,".mp3",".mp4",".avi",".rmvb"};
         public FileUploadService()
         {
             date = DateTime.Now.ToString("yyyyMMdd");
