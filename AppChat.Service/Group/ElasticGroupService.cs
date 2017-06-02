@@ -3,6 +3,7 @@ using AppChat.ElasticSearch.Model;
 using AppChat.ElasticSearch.Models;
 using AppChat.Model;
 using AppChat.Model.ViewModel;
+using AppChat.Service._Interface;
 using AppChat.Utils.Extension;
 using AppChat.Utils.JsonResult;
 using AppChat.Utils.Validate;
@@ -15,13 +16,6 @@ using System.Threading.Tasks;
 
 namespace AppChat.Service.Group
 {
-    public interface IElasticGroupService
-    {
-        bool IndexGroup(LayImGroup group);
-        LayImGroup IndexGroup(DataTable dt);
-        JsonResultModel SearchLayimGroup(string keyword, int pageIndex = 1, int pageSize = 50);
-    }
-
     public class ElasticGroupService : IElasticGroupService
     {
         private Elastic<LayImGroup> es

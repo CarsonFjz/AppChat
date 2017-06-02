@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Elastic.cs" />
+    <Compile Include="Core\IElastic.cs" />
     <Compile Include="Models\Models.cs" />
     <Compile Include="Model\BaseEntity.cs" />
     <Compile Include="Model\BaseQueryEntity.cs" />

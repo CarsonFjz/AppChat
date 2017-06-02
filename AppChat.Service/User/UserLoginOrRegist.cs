@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace AppChat.Service.User
 {
-    public class UserLoginOrRegist : IUser
+    public class UserLoginOrRegist : IUserService
     {
         private IRedisCache _redisCache;
         private IElasticGroupService _elastic;

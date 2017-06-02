@@ -89,9 +89,10 @@ namespace AppChat.Service.User
 
             #endregion
 
-            #region 3.0群信息
+            #region 3.0 群信息
             //var group = await _groupListService. 
             #endregion
+
             BaseListResult result = new BaseListResult
             {
                 mine = mineModel,

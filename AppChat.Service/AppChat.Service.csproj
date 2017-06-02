@@ -60,6 +60,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,12 +71,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="File\FileUploadService.cs" />
+    <Compile Include="File\FormDataService.cs" />
     <Compile Include="Group\ElasticGroupService.cs" />
     <Compile Include="Group\CreateGroupService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User\UserLoginOrRegist.cs" />
     <Compile Include="User\UserService.cs" />
-    <Compile Include="_Interface\IUser.cs" />
+    <Compile Include="_Interface\IFileUploadService.cs" />
+    <Compile Include="_Interface\IFormDataService.cs" />
+    <Compile Include="_Interface\IGroupService.cs" />
+    <Compile Include="_Interface\IUserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppChat.Cache\AppChat.Cache.csproj">

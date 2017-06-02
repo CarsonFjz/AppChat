@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AppChat.Service._Interface
 {
-    public interface IUser
+    public interface IUserService
     {
 
         #region 用户注册或者登陆
