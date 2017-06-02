@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppChat.Utils.Guids
+namespace AppChat.Utils.IDCreate
 {
-    public static class Generator
+    public partial class Generator
     {
         [DllImport("rpcrt4.dll", SetLastError = true)]
         public static extern int UuidCreateSequential(out Guid guid);
