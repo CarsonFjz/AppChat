@@ -2,15 +2,10 @@
 using AppChat.Model;
 using AppChat.Model.Convert;
 using AppChat.Model.Core;
-using AppChat.Model.Message;
 using AppChat.Service._Interface;
-using AppChat.Service.Group;
-using AppChat.Utils.Extension;
 using AppChat.Utils.JsonResult;
 using SqlSugar;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,10 +16,10 @@ namespace AppChat.Service.User
         private IRedisCache _redisCache;
         private IElasticGroupService _elastic;
         private SqlSugarClient _context;
-        public UserLoginOrRegist(IRedisCache redisCache,IElasticGroupService elastic, SqlSugarClient context)
+        public UserLoginOrRegist(IRedisCache redisCache, SqlSugarClient context)//,IElasticGroupService elastic
         {
             _redisCache = redisCache;
-            _elastic = elastic;
+            //_elastic = elastic;
             _context = context;
         }
 

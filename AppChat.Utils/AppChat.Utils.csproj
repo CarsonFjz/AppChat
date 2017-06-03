@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Config\AppSettings.cs" />
     <Compile Include="Consts\LayIMConst.cs" />
+    <Compile Include="Consts\TipsConst.cs" />
     <Compile Include="Cookie\CookieHelper.cs" />
     <Compile Include="Extension\DateTimeExtension.cs" />
     <Compile Include="Extension\ObjectExtension.cs" />

@@ -8,13 +8,13 @@ namespace AppChat.DI
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterGeneric(typeof(Elastic<>)).As(typeof(IElastic<>)).SingleInstance();
+            //builder.RegisterGeneric(typeof(Elastic<>)).As(typeof(Elastic<>)).SingleInstance();
 
-            using (IContainer container = builder.Build())
-            {
-                container.Resolve<IElastic<LayImUser>>();
-                container.Resolve<IElastic<LayImGroup>>();
-            }
+            //using (IContainer container = builder.Build())
+            //{
+            //    container.Resolve<IElastic<LayImUser>>();
+            //    container.Resolve<IElastic<LayImGroup>>();
+            //}
         }
     }
 }

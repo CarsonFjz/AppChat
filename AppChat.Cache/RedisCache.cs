@@ -44,8 +44,11 @@ namespace AppChat.Cache
         {
             var key = LayIMConst.LayIM_Cache_UserLoginToken;
             string token = CookieHelper.GetCookieValue(key, contextBase);
-            //TODO: cookie为空情况还没有处理
-            return cacheClient.HashGetAsync<string>(key, token).Result;
+            if (token == string.Empty)
+            {
+                return TipsConst.cookieIsEmpty;
+            }
+            return cacheClient.HashGet<string>(key, token);
         }
         #endregion
 

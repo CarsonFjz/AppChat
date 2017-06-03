@@ -12,7 +12,7 @@ namespace AppChat.DI
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<RedisCache>().As<IRedisCache>().SingleInstance();
+            builder.RegisterType<RedisCache>().As<IRedisCache>().InstancePerLifetimeScope();
         }
     }
 }

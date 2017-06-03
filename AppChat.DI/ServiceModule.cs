@@ -1,6 +1,7 @@
 ﻿using AppChat.Service;
 using AppChat.Service._Interface;
 using AppChat.Service.File;
+using AppChat.Service.User;
 using Autofac;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,10 @@ namespace AppChat.DI
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<CreateGroupService>().As<ICreateGroupService>().SingleInstance();
-            builder.RegisterType<FileUploadService>().As<IFileUploadService>().SingleInstance();
+            builder.RegisterType<CreateGroupService>().As<ICreateGroupService>().InstancePerLifetimeScope();
+            builder.RegisterType<FileUploadService>().As<IFileUploadService>().InstancePerLifetimeScope();
+            builder.RegisterType<UserLoginOrRegist>().As<IUserLoginOrRegist>().InstancePerLifetimeScope();
+            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
         }
     }
 }
