@@ -2,7 +2,7 @@
 using AppChat.ElasticSearch.Models;
 using Autofac;
 
-namespace AppChat.DI
+namespace AppChat.ElasticSearch.AutoFac
 {
     public class ElasticModule : Module
     {

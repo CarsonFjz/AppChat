@@ -1,13 +1,10 @@
-﻿using AppChat.DI;
+﻿using AppChat.IMApi.AutoFac;
+using AppChat.IMApi.Filters;
 using Autofac;
 using Autofac.Integration.WebApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Serilog;
 using System.Reflection;
-using System.Web;
 using System.Web.Http;
-using System.Web.Routing;
 
 namespace AppChat.IMApi
 {
@@ -19,17 +16,17 @@ namespace AppChat.IMApi
 
             var builder = new ContainerBuilder();
 
-            // Get HttpConfiguration.
+            // 获取 HttpConfiguration.
             var config = GlobalConfiguration.Configuration;
 
-            // Register Modules.
-            builder.RegisterModule<CacheModule>();
-            builder.RegisterModule<ElasticModule>();
-            builder.RegisterModule<ServiceModule>();
-            builder.RegisterModule<OrmModule>();
+            // 注册 Modules.
+            builder.RegisterModule<LogModule>();
+            builder.RegisterModule<ApiModule>();
 
-            // Register Web API controllers.
+            // 注册 Web API controllers.
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+
+            builder.Register(c => new ExceptionFilter(c.ResolveKeyed<ILogger>("webapi_exception"))).AsWebApiExceptionFilterFor<ApiController>().InstancePerLifetimeScope();
 
             // OPTIONAL: Register the Autofac filter provider.
             builder.RegisterWebApiFilterProvider(config);

@@ -13,6 +13,7 @@ namespace AppChat.IMApi
         {
             // Web API 配置和服务
             config.Filters.Add(new UserAuthorizeAttribute());
+            config.Filters.Add(new ValidateModelStateFilter());
 
             // Web API 路由
             config.MapHttpAttributeRoutes();

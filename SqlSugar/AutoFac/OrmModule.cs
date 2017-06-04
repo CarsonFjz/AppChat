@@ -1,8 +1,7 @@
 ﻿using AppChat.Utils.Config;
 using Autofac;
-using SqlSugar;
 
-namespace AppChat.DI
+namespace SqlSugar.AutoFac
 {
     public class OrmModule : Module
     {

@@ -17,7 +17,7 @@ namespace AppChat.Model
     public class AvatarIntEntity
     {
         public int id { get; set; }
-        public string avatar { get; set; } 
+        public string avatar { get; set; }
     }
     public class AvatarGuidEntity
     {
@@ -58,7 +58,8 @@ namespace AppChat.Model
     /// </summary>
     public class FriendGroupEntity : GroupEntity
     {
-        public FriendGroupEntity() {
+        public FriendGroupEntity()
+        {
             //好友分组，该选项不需要
             avatar = "";
         }

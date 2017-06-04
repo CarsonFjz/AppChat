@@ -51,5 +51,46 @@ namespace AppChat.Utils.Config
             }
         }
         #endregion
+
+        #region RabbitMQ
+        public static string RabbitMqBaseUri
+        {
+            get
+            {
+                return AppSettingValue();
+            }
+        }
+        public static string BaseQueueName
+        {
+            get
+            {
+                return AppSettingValue();
+            }
+        }
+        public static string RabbitMqUserPassword
+        {
+            get
+            {
+                return AppSettingValue();
+            }
+        }
+        public static string RabbitMqUserName
+        {
+            get
+            {
+                return AppSettingValue();
+            }
+        }
+        #endregion
+
+        #region Log
+        public static string SeqSinkServerAddress
+        {
+            get
+            {
+                return AppSettingValue();
+            }
+        } 
+        #endregion
     }
 }

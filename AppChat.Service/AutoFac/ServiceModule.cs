@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppChat.DI
+namespace AppChat.Service.AutoFac
 {
     public class ServiceModule: Module
     {

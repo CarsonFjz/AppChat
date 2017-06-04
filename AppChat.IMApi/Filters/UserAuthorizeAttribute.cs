@@ -37,7 +37,7 @@ namespace AppChat.IMApi.Filters
 
             var userid = service.GetCurrentUserId();
 
-            if (false)//userid == TipsConst.cookieIsEmpty
+            if (userid == TipsConst.cookieIsEmpty)
             {
                 return new HttpResponseMessage
                 {
