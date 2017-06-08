@@ -1,7 +1,5 @@
-﻿using AppChat.Cache;
-using AppChat.Model.Reponse;
+﻿using AppChat.Model;
 using AppChat.Model.Request;
-using AppChat.Service._Interface;
 using MassTransit;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -11,8 +9,8 @@ namespace AppChat.IMApi.Controllers
     [RoutePrefix("api/home")]
     public class HomeController : ApiController
     {
-        private IRequestClient<LoginRequest,MessageReponse> _loginService;
-        public HomeController(IRequestClient<LoginRequest, MessageReponse> loginService)
+        private IRequestClient<LoginRequest, JsonResultModel> _loginService;
+        public HomeController(IRequestClient<LoginRequest, JsonResultModel> loginService)
         {
             _loginService = loginService;
         }

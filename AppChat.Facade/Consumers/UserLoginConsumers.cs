@@ -1,5 +1,4 @@
 ﻿using AppChat.Cache;
-using AppChat.Model.Reponse;
 using AppChat.Model.Request;
 using AppChat.Service._Interface;
 using MassTransit;
@@ -28,12 +27,7 @@ namespace AppChat.Facade.Consumers
                 await _redisCacheService.CacheUserAfterLogin(userid);
             }
 
-            var response = new MessageReponse()
-            {
-                Result = result
-            };
-
-            await context.RespondAsync(response);
+            await context.RespondAsync(result);
         }
     }
 }

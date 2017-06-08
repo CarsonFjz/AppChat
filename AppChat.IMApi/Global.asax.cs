@@ -5,6 +5,7 @@ using Autofac.Integration.WebApi;
 using Serilog;
 using System.Reflection;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace AppChat.IMApi
 {

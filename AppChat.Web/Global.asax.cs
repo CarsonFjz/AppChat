@@ -3,6 +3,7 @@ using Owin;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Http;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace AppChat.Web
@@ -11,6 +12,8 @@ namespace AppChat.Web
     {
         protected void Application_Start()
         {
+            
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

@@ -77,7 +77,6 @@
     <Compile Include="Message\DB\LoginUser.cs" />
     <Compile Include="Online\OnlineUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reponse\MessageReponse.cs" />
     <Compile Include="Request\HomeModel.cs" />
     <Compile Include="Result\SendMessageResult.cs" />
     <Compile Include="ViewModel\LayIMGroup.cs" />

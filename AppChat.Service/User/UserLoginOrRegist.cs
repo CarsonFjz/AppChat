@@ -36,13 +36,13 @@ namespace AppChat.Service.User
             userid = 0;
 
             //TODO:判断用户是否存在,存在就获取信息 done
-            var loginUser = _context.Queryable<layim_user>().Where(x => x.loginname == loginName && x.loginpwd == loginPwd).ToList();
+            var loginUser = _context.Queryable<layim_user>().Where(x => x.loginname == loginName && x.loginpwd == loginPwd).Single();
 
             if (loginUser != null)
             {
                 return JsonResultHelper.CreateJson(new { userid = loginUser });
             }
-            return JsonResultHelper.CreateJson(false);
+            return JsonResultHelper.CreateJson(false,"账号或者密码错误");
 
         }
         #endregion

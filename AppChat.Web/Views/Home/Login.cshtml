@@ -6,12 +6,17 @@
     <meta name="viewport" content="width=device-width" />
     <title>Login</title>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/MyAjax.js"></script>
     <script src="~/Scripts/login.js"></script>
     <script>
         $(function () {
-               // alert("由于授权原因，layui代码将不再公开，请谅解。");
-                $(document).on('click', '#btnLogin', function () {
-                    $.post('/userlogin', { username: $('#txtUserName').val(), password: $('#txtUserPwd').val() }, function (result) {
+            // alert("由于授权原因，layui代码将不再公开，请谅解。");
+            $(document).on('click', '#btnLogin', function () {
+                $.ajax({
+                    type: "post",
+                    url: urlset("home/login"),
+                    data: { username: $('#txtUserName').val(), password: $('#txtUserPwd').val() },
+                    success: function (result) {
                         if (result.code == 0) {
                             var uid = result.data.userid;
                             if (uid <= 0) {
@@ -21,17 +26,17 @@
                                 location.href = '/';
                             }
                         } else {
-
                             alert(result.msg);
                         }
-                    });
+                    }
                 });
+            });
         });
     </script>
 </head>
 <body>
-   <input type="text" placeholder="User Name" id="txtUserName"/>
-    <input type="password" placeholder="Password" id="txtUserPwd"/>
-    <input type="button" id="btnLogin" value="Login"/>
+    <input type="text" placeholder="User Name" id="txtUserName" />
+    <input type="password" placeholder="Password" id="txtUserPwd" />
+    <input type="button" id="btnLogin" value="Login" />
 </body>
 </html>
