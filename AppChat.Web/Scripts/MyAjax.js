@@ -38,6 +38,7 @@
         return _ajax(_opt);
     };
 })(jQuery);
+
 function urlset(urlstr) {
-    return "http://localhost:54056/api/" + urlstr;
+    return config.ajaxAddress + urlstr;
 }

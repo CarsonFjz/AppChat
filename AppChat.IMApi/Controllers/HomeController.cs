@@ -10,9 +10,12 @@ namespace AppChat.IMApi.Controllers
     public class HomeController : ApiController
     {
         private IRequestClient<LoginRequest, JsonResultModel> _loginService;
-        public HomeController(IRequestClient<LoginRequest, JsonResultModel> loginService)
+        private IRequestClient<AddUserRequest, JsonResultModel> _registService;
+        public HomeController(IRequestClient<LoginRequest, JsonResultModel> loginService,
+                              IRequestClient<AddUserRequest, JsonResultModel> registService)
         {
             _loginService = loginService;
+            _registService = registService;
         }
 
         [AllowAnonymous]
@@ -24,12 +27,13 @@ namespace AppChat.IMApi.Controllers
             return Json(result);
         }
 
-        //[Route("regist"), HttpPost]
-        //public async Task<IHttpActionResult> RegistUser(AddUserRequest model)
-        //{
-        //    await _redisCacheService.CacheUserAfterLogin(1);
+        [AllowAnonymous]
+        [Route("regist"), HttpPost]
+        public async Task<IHttpActionResult> RegistUser(AddUserRequest model)
+        {
+            var result = await _registService.Request(model);
 
-        //    return Json(new { id = 1 });
-        //}
+            return Json(result);
+        }
     }
 }

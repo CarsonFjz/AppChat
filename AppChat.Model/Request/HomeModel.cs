@@ -10,5 +10,7 @@
     {
         public string username { get; set; }
         public string password { get; set; }
+        public string nickname { get; set; }
+        public bool sex { get; set; }
     }
 }

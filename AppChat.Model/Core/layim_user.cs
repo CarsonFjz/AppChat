@@ -54,7 +54,7 @@ namespace AppChat.Model.Core
         /// Default:(getdate()) 
         /// Nullable:False 
         /// </summary>
-        public DateTime addtime {get;set;}
+        public long addtime {get;set;}
 
         /// <summary>
         /// Desc:IM号 
@@ -62,6 +62,11 @@ namespace AppChat.Model.Core
         /// Nullable:False 
         /// </summary>
         public int im {get;set;}
+
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public bool sex { get; set; }
 
     }
 }

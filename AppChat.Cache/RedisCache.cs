@@ -31,10 +31,6 @@ namespace AppChat.Cache
                 //写cookie
                 CookieHelper.SetCookie(key, token);
             }
-            else
-            {
-                //记录日志
-            }
         }
         #endregion
 

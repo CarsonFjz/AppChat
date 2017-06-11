@@ -3,8 +3,10 @@ using AppChat.Model;
 using AppChat.Model.Convert;
 using AppChat.Model.Core;
 using AppChat.Service._Interface;
+using AppChat.Utils;
 using AppChat.Utils.JsonResult;
 using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,17 +15,17 @@ namespace AppChat.Service.User
 {
     public class UserLoginOrRegist : IUserLoginOrRegist
     {
-        private IRedisCache _redisCache;
+        private IRedisCache _redisCacheService;
         private IElasticGroupService _elastic;
         private SqlSugarClient _context;
         public UserLoginOrRegist(IRedisCache redisCache, SqlSugarClient context)//,IElasticGroupService elastic
         {
-            _redisCache = redisCache;
+            _redisCacheService = redisCache;
             //_elastic = elastic;
             _context = context;
         }
 
-        #region 用户登录流程
+
         /// <summary>
         /// 用户登陆或者注册，返回用户id如果为 0 说明密码错误
         /// </summary>
@@ -45,56 +47,46 @@ namespace AppChat.Service.User
             return JsonResultHelper.CreateJson(false,"账号或者密码错误");
 
         }
-        #endregion
 
-        #region 获取某个用户的好友列表
         /// <summary>
-        /// 获取某个用户的好友列表
+        /// 注册新用户
         /// </summary>
-        /// <param name="userid">用户ID</param>
-        /// <returns>返回格式如下 ""或者 "10001,10002,10003"</returns>
-        public async Task<List<v_layim_friend_group_detail_info>> GetUserFriends(int userid)
+        /// <param name="loginNmae"></param>
+        /// <param name="loginPwd"></param>
+        /// <param name="nickName"></param>
+        /// <param name="sex"></param>
+        /// <returns></returns>
+        public async Task<JsonResultModel> UserRegist(string loginNmae, string loginPwd, string nickName, bool sex)
         {
-            //先读取缓存
-            var friends = await _redisCache.GetUserFriendList(userid);
-            //如果缓存中没有
-            if (friends.Count == 0)
+            //1.先验证是否存在该用户登录名
+            if (true == _context.Queryable<layim_user>().Where(x => x.loginname == loginNmae).Any())
             {
-                //从数据库读取，在保存到缓存中
-                var friendList = _context.Queryable<v_layim_friend_group_detail_info>().Where(x => x.userid == userid).ToList();
-
-                StringBuilder friendStr = new StringBuilder();
-
-                foreach (var item in friendList)
-                {
-                    friendStr.Append(item.userid);
-                }
-                await _redisCache.SetUserFriendList(userid, friends);
+                return await JsonResultHelper.CreateJsonAsync(false,"该登陆名已经被注册");
             }
-            return friends;
+
+            //2.添加用户
+            var userModel = new layim_user()
+            {
+                loginname = loginNmae,
+                nickname = nickName,
+                loginpwd = loginPwd,
+                sex = sex,
+                addtime = DateTimeConverter.DateTimeToInt(DateTime.Now)
+            };
+
+            var Identity = _context.Insertable(userModel).ExecuteReutrnIdentity();
+
+            //3.自动登陆缓存
+            await _redisCacheService.CacheUserAfterLogin(Identity);
+
+            if (Identity > 0)
+            {
+                return await JsonResultHelper.CreateJsonAsync(true,"注册成功");
+            }
+
+            return await JsonResultHelper.CreateJsonAsync(false,"注册失败,请联系管理员");
         }
-        #endregion
 
-        #region 获取用户有关的消息
-        public async Task<JsonResultModel> GetUserApplyMessage(int userid)
-        {
-            var userMessageResult = _context.Queryable<v_layim_apply>()
-                                            .Where(x => x.targetid == userid.ToString() || x.userid == userid)
-                                            .OrderBy(x=>x.applytime,OrderByType.Desc)
-                                            .ToList().Convert(userid);
-
-            return await JsonResultHelper.CreateJsonAsync(userMessageResult, true);
-        }
-        #endregion
-
-        #region 读取用户所在的群
-        public async Task<JsonResultModel> GetUserAllGroups(int userId)
-        {
-            var userGroupResult = _context.Queryable<layim_friend_group_detail>().Where(x => x.uid == userId).ToList();
-
-            return await JsonResultHelper.CreateJsonAsync(userGroupResult, true);
-        }
-        #endregion
 
     }
 }

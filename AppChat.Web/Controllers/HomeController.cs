@@ -8,7 +8,7 @@ namespace AppChat.Web.Controllers
         {
             return View();
         }
-        public ActionResult IndexV3()
+        public ActionResult Regist()
         {
             return View();
         }

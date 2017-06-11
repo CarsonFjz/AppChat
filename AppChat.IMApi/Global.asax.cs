@@ -1,4 +1,5 @@
-﻿using AppChat.IMApi.AutoFac;
+﻿using AppChat.Cache.AutoFac;
+using AppChat.IMApi.AutoFac;
 using AppChat.IMApi.Filters;
 using Autofac;
 using Autofac.Integration.WebApi;
@@ -22,6 +23,7 @@ namespace AppChat.IMApi
 
             // 注册 Modules.
             builder.RegisterModule<LogModule>();
+            builder.RegisterModule<CacheModule>();
             builder.RegisterModule<ApiModule>();
 
             // 注册 Web API controllers.

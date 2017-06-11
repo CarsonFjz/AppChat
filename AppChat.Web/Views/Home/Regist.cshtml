@@ -1,0 +1,56 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Regist</title>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="~/Scripts/config.js"></script>
+    <script src="~/Scripts/MyAjax.js"></script>
+
+    <script>
+        $(function () {
+            $(document).on('click', '#btnRegist', function () {
+                $.ajax({
+                    type: "post",
+                    url: urlset("home/regist"),
+                    data: {
+                        username: $('#txtUserName').val(),
+                        password: $('#txtUserPwd').val(),
+                        nickname: $('#txtNickName').val(),
+                        sex: $('#Sex').val(),
+                    },
+                    success: function (result) {
+                        if (result.code == 0) {
+                            location.href = '/';
+                        } else {
+                            alert(result.msg);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <input type="text" placeholder="Nick Name" id="txtNickName" />
+    <br />
+    <input type="text" placeholder="User Name" id="txtUserName" />
+    <br />
+    <input type="password" placeholder="Password" id="txtUserPwd" />
+    <br />
+    男：
+    <input type="radio" id="Sex" checked="checked" value="true" />
+    女：
+    <input type="radio" id="Sex" value="false" />
+    <br />
+    <input type="password" placeholder="Password" id="txtUserPwdconfirm" />
+    <input type="button" id="btnRegist" value="Login" />
+    
+</body>
+</html>

@@ -7,6 +7,11 @@ namespace AppChat.IMApi.Validators.Home
     {
         public AddUserRequestValidator()
         {
+            RuleFor(x => x.nickname)
+                .NotEmpty()
+                .NotNull()
+                .Length(3, 9);
+
             RuleFor(x => x.username)
                 .NotEmpty()
                 .NotNull()

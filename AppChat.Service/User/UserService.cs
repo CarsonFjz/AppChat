@@ -4,15 +4,19 @@ using AppChat.ElasticSearch.Ext;
 using AppChat.ElasticSearch.Model;
 using AppChat.ElasticSearch.Models;
 using AppChat.Model;
+using AppChat.Model.Convert;
 using AppChat.Model.Core;
+using AppChat.Model.Message;
 using AppChat.Service._Interface;
 using AppChat.Utils.Extension;
 using AppChat.Utils.JsonResult;
 using AppChat.Utils.Validate;
 using SqlSugar;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AppChat.Service.User
@@ -23,11 +27,6 @@ namespace AppChat.Service.User
         private IElastic<LayImUser> _elasticUserService;
         private IElasticChat _elasticChatService;
         private SqlSugarClient _context;
-        //private IBaseRepository<layim_user> _userService;
-        //private IBaseRepository<ApplyMessage> _applyMessageService;
-        //private IBaseRepository<v_group_detail> _groupListService;
-        //private IBaseRepository<v_layim_friend_group> _friendListService;
-        //private IBaseRepository<v_layim_friend_group_detail> _friendDetailListService;
         public UserService(IRedisCache redisCacheService, IElastic<LayImUser> elasticService, IElasticChat elasticChatService, SqlSugarClient context)
         {
             _redisCacheService = redisCacheService;
@@ -97,6 +96,57 @@ namespace AppChat.Service.User
             };
             return await JsonResultHelper.CreateJsonAsync(result, result != null);
         }
+        #endregion
+
+        #region 获取用户初始化信息
+        /// <summary>
+        /// 获取某个用户的好友列表
+        /// </summary>
+        /// <param name="userid">用户ID</param>
+        /// <returns>返回格式如下 ""或者 "10001,10002,10003"</returns>
+        public async Task<List<v_layim_friend_group_detail_info>> GetUserFriends(int userid)
+        {
+            //先读取缓存
+            var friends = await _redisCacheService.GetUserFriendList(userid);
+            //如果缓存中没有
+            if (friends.Count == 0)
+            {
+                //从数据库读取，在保存到缓存中
+                var friendList = _context.Queryable<v_layim_friend_group_detail_info>().Where(x => x.userid == userid).ToList();
+
+                StringBuilder friendStr = new StringBuilder();
+
+                foreach (var item in friendList)
+                {
+                    friendStr.Append(item.userid);
+                }
+                await _redisCacheService.SetUserFriendList(userid, friends);
+            }
+            return friends;
+        }
+
+        /// <summary>
+        /// 获取用户相关消息
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public List<ApplyMessage> GetUserApplyMessage(int userid)
+        {
+            return _context.Queryable<v_layim_apply>()
+                           .Where(x => x.targetid == userid.ToString() || x.userid == userid)
+                           .OrderBy(x => x.applytime, OrderByType.Desc)
+                           .ToList().Convert(userid);
+        }
+
+        /// <summary>
+        /// 读取用户所在群
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<layim_friend_group_detail> GetUserAllGroups(int userId)
+        {
+            return _context.Queryable<layim_friend_group_detail>().Where(x => x.uid == userId).ToList();
+        } 
         #endregion
 
         //#region 获取群组人员信息
@@ -264,7 +314,5 @@ namespace AppChat.Service.User
         }
 
         #endregion
-
-        
     }
 }
