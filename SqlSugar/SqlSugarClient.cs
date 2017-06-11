@@ -98,6 +98,7 @@ namespace SqlSugar
         /// </summary>
         public virtual ISugarQueryable<T> Queryable<T>() where T : class, new()
         {
+
             InitMppingInfo<T>();
             var result = base.CreateQueryable<T>();
             return result;
@@ -279,6 +280,25 @@ namespace SqlSugar
             set
             {
                 base._EntityProvider = value;
+            }
+        }
+        #endregion
+
+        #region Gobal Filter
+        public QueryFilterProvider QueryFilter
+        {
+            get
+            {
+                if (base._QueryFilterProvider == null)
+                {
+                    base._QueryFilterProvider = new QueryFilterProvider();
+                    base._QueryFilterProvider.Context = this;
+                }
+                return _QueryFilterProvider;
+            }
+            set
+            {
+                base._QueryFilterProvider = value;
             }
         }
         #endregion

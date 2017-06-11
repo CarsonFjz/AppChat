@@ -14,22 +14,16 @@ namespace AppChat.SignalRHostSelf
         {
             HostFactory.Run(x =>
             {
-                x.Service<SignalRService>(s=> 
-                {
-                    s.ConstructUsing(name => new SignalRService());
-                });
+                x.Service<SignalRService>();
+                x.RunAsLocalSystem();
 
+                x.SetDescription("SignalR Service");
+                x.SetDisplayName("SignalR Service");
+                x.SetServiceName("SignalR");
             });
-        }
-    }
-
-    public class SignalRService
-    {
-        public SignalRService()
-        {
-            WebApp.Start<Startup>("http://localhost:8050");
-            Console.WriteLine("Server running ok");
             Console.ReadLine();
         }
     }
+
+    
 }

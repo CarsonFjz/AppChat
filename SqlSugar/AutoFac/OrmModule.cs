@@ -1,4 +1,5 @@
-﻿using AppChat.Utils.Config;
+﻿
+using AppChat.Utils.Config;
 using Autofac;
 
 namespace SqlSugar.AutoFac

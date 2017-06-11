@@ -7,7 +7,7 @@ namespace AppChat.Service._Interface
     {
         #region 用户注册或者登陆
         JsonResultModel UserLogin(string loginName, string loginPwd, out int userid);
-        Task<JsonResultModel> UserRegist(string loginNmae, string loginPwd, string nickName, bool sex);
+        JsonResultModel UserRegist(string loginNmae, string loginPwd, string nickName, bool sex);
         #endregion
     }
 }

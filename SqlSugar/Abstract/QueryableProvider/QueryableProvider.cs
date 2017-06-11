@@ -62,20 +62,35 @@ namespace SqlSugar
             return this;
         }
 
-        public ISugarQueryable<T> AddParameters(object whereObj)
+        public ISugarQueryable<T> Filter(string FilterName,bool isDisabledGobalFilter = false)
         {
-            if (whereObj != null)
-                QueryBuilder.Parameters.AddRange(Context.Ado.GetParameters(whereObj));
+            QueryBuilder.IsDisabledGobalFilter = isDisabledGobalFilter;
+            if (this.Context.QueryFilter.GeFilterList.IsValuable()&&FilterName.IsValuable())
+            {
+                var list = this.Context.QueryFilter.GeFilterList.Where(it => it.FilterName == FilterName&&it.IsJoinQuery == !QueryBuilder.IsSingle());
+                foreach (var item in list)
+                {
+                    var filterResult = item.FilterValue(this.Context);
+                    Where(SqlBuilder.AppendWhereOrAnd(QueryBuilder.WhereInfos.IsNullOrEmpty(),filterResult.Sql), filterResult.Parameters);
+                }
+            }
             return this;
         }
-        public ISugarQueryable<T> AddParameters(SugarParameter[] pars)
+
+        public ISugarQueryable<T> AddParameters(object parameters)
         {
-            QueryBuilder.Parameters.AddRange(pars);
+            if (parameters != null)
+                QueryBuilder.Parameters.AddRange(Context.Ado.GetParameters(parameters));
             return this;
         }
-        public ISugarQueryable<T> AddParameters(SugarParameter par)
+        public ISugarQueryable<T> AddParameters(SugarParameter[] parameters)
         {
-            QueryBuilder.Parameters.Add(par);
+            QueryBuilder.Parameters.AddRange(parameters);
+            return this;
+        }
+        public ISugarQueryable<T> AddParameters(SugarParameter parameter)
+        {
+            QueryBuilder.Parameters.Add(parameter);
             return this;
         }
 
@@ -119,12 +134,12 @@ namespace SqlSugar
             this._Having(expression);
             return this;
         }
-        public ISugarQueryable<T> Having(string whereString, object whereObj = null)
+        public ISugarQueryable<T> Having(string whereString, object parameters = null)
         {
 
             QueryBuilder.HavingInfos = SqlBuilder.AppendHaving(whereString);
-            if (whereObj != null)
-                QueryBuilder.Parameters.AddRange(Context.Ado.GetParameters(whereObj));
+            if (parameters != null)
+                QueryBuilder.Parameters.AddRange(Context.Ado.GetParameters(parameters));
             return this;
         }
 
@@ -489,20 +504,39 @@ namespace SqlSugar
             List<TResult> result = null;
             var sqlObj = this.ToSql();
             var isComplexModel = QueryBuilder.IsComplexModel(sqlObj.Key);
+            var entityType = typeof(TResult);
             using (var dataReader = this.Db.GetDataReader(sqlObj.Key, sqlObj.Value.ToArray()))
             {
-                var tType = typeof(TResult);
-                if (tType.IsAnonymousType() || isComplexModel)
+                if (entityType.IsAnonymousType() || isComplexModel)
                 {
                     result = this.Context.RewritableMethods.DataReaderToDynamicList<TResult>(dataReader);
                 }
                 else
                 {
-                    result = this.Bind.DataReaderToList<TResult>(tType, dataReader, QueryBuilder.SelectCacheKey);
+                    result = this.Bind.DataReaderToList<TResult>(entityType, dataReader, QueryBuilder.SelectCacheKey);
                 }
                 if (this.Context.CurrentConnectionConfig.IsAutoCloseConnection) this.Context.Close();
             }
             RestoreMapping();
+            if (result.IsValuable())
+            {
+                if (entityType.BaseType.IsValuable() && entityType.BaseType == PubConst.ModelType)
+                {
+                    foreach (var item in result)
+                    {
+                       var contextProperty=item.GetType().GetProperty("Context");
+                        ConnectionConfig config = new ConnectionConfig();
+                        config =this.Context.CurrentConnectionConfig;
+                        var newClient = new SqlSugarClient(config);
+                        newClient.MappingColumns = this.Context.MappingColumns;
+                        newClient.MappingTables = this.Context.MappingTables;
+                        newClient.IgnoreColumns = this.Context.IgnoreColumns;
+                        newClient.Ado.MasterConnectionConfig = this.Context.Ado.MasterConnectionConfig;
+                        newClient.Ado.SlaveConnectionConfigs = this.Context.Ado.SlaveConnectionConfigs;
+                        contextProperty.SetValue(item, newClient, null);
+                    }
+                }
+            }
             return result;
         }
         protected List<string> GetPrimaryKeys()

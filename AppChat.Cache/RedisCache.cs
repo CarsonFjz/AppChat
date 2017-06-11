@@ -20,17 +20,15 @@ namespace AppChat.Cache
         StackExchangeRedisCacheClient cacheClient = new StackExchangeRedisCacheClient(serializer);
 
         #region 缓存用户的token
-        public async Task CacheUserAfterLogin(int userid)
+        public bool CacheUserAfterLogin(int userid, string key = null, string token = null)
         {
-            var key = LayIMConst.LayIM_Cache_UserLoginToken;
-            var token = RandomHelper.GetUserToken();
-            //存redis
-            bool result = await cacheClient.HashSetAsync(key, token, userid);
-            if (result)
+            if (key == null && token == null)
             {
-                //写cookie
-                CookieHelper.SetCookie(key, token);
+                key = LayIMConst.LayIM_Cache_UserLoginToken;
+                token = RandomHelper.GetUserToken();
             }
+            //存redis
+            return cacheClient.HashSet(key, token, userid);
         }
         #endregion
 

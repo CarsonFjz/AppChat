@@ -39,6 +39,3 @@
     };
 })(jQuery);
 
-function urlset(urlstr) {
-    return config.ajaxAddress + urlstr;
-}

@@ -24,7 +24,7 @@ namespace AppChat.Facade.Consumers
 
             if (userid > 0)
             {
-                await _redisCacheService.CacheUserAfterLogin(userid);
+                _redisCacheService.CacheUserAfterLogin(userid);
             }
 
             await context.RespondAsync(result);

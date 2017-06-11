@@ -1,9 +1,12 @@
 ﻿
-using AppChat.DI;
+using AppChat.Cache.AutoFac;
+using AppChat.ElasticSearch.AutoFac;
+using AppChat.Service.AutoFac;
 using Autofac;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Cors;
 using Owin;
+using SqlSugar.AutoFac;
 using System.Diagnostics;
 
 namespace AppChat.SignalRHostSelf

@@ -1,14 +1,7 @@
 ﻿using AppChat.Cache;
-using AppChat.Utils.Consts;
-using AppChat.Utils.Cookie;
-using AppChat.Utils.Single;
 using Microsoft.AspNet.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace AppChat.Web.UserIdProvider
+namespace AppChat.IMApi.UserIdProvider
 {
     public class UserCache : IUserIdProvider
     {

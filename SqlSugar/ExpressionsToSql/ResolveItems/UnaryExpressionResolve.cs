@@ -20,29 +20,51 @@ namespace SqlSugar
                 case ResolveExpressType.SelectSingle:
                 case ResolveExpressType.SelectMultiple:
                 case ResolveExpressType.Update:
+                    var nodeType = expression.NodeType;
                     base.Expression = expression.Operand;
-                    if (base.Expression is BinaryExpression||parameter.BaseExpression is BinaryExpression)
+                    var isMember = expression.Operand is MemberExpression;
+                    var isConst = expression.Operand is ConstantExpression;
+                    if (base.Expression is BinaryExpression || parameter.BaseExpression is BinaryExpression)
                     {
-                        BaseParameter.ChildExpression = base.Expression;
-                        parameter.CommonTempData = CommonTempDataType.Default;
-                        base.Start();
-                        parameter.BaseParameter.CommonTempData = parameter.CommonTempData;
-                        parameter.BaseParameter.ChildExpression = base.Expression;
-                        parameter.CommonTempData = null;
+                        Append(parameter, nodeType);
                     }
-                    else if (base.Expression is MemberExpression || base.Expression is ConstantExpression)
+                    else if (isMember || isConst)
                     {
-                        BaseParameter.ChildExpression = base.Expression;
-                        parameter.CommonTempData = CommonTempDataType.ChildNodeSet;
-                        base.Start();
-                        parameter.BaseParameter.CommonTempData = parameter.CommonTempData;
-                        parameter.BaseParameter.ChildExpression = base.Expression;
-                        parameter.CommonTempData = null;
+                        Result(parameter, nodeType);
+                    }
+                    else
+                    {
+                        Append(parameter, nodeType);
                     }
                     break;
                 default:
                     break;
             }
+        }
+
+        private void Result(ExpressionParameter parameter, ExpressionType nodeType)
+        {
+            BaseParameter.ChildExpression = base.Expression;
+            parameter.CommonTempData = CommonTempDataType.Result;
+            if (nodeType == ExpressionType.Not)
+                AppendNot(parameter.CommonTempData);
+            base.Start();
+            parameter.BaseParameter.CommonTempData = parameter.CommonTempData;
+            parameter.BaseParameter.ChildExpression = base.Expression;
+            parameter.CommonTempData = null;
+        }
+
+        private void Append(ExpressionParameter parameter, ExpressionType nodeType)
+        {
+            BaseParameter.ChildExpression = base.Expression;
+            this.IsLeft = parameter.IsLeft;
+            parameter.CommonTempData = CommonTempDataType.Append;
+            if (nodeType == ExpressionType.Not)
+                AppendNot(parameter.CommonTempData);
+            base.Start();
+            parameter.BaseParameter.CommonTempData = parameter.CommonTempData;
+            parameter.BaseParameter.ChildExpression = base.Expression;
+            parameter.CommonTempData = null;
         }
     }
 }

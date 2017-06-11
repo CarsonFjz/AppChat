@@ -11,6 +11,7 @@ namespace SqlSugar
         public InsertBuilder()
         {
             this.sql = new StringBuilder();
+            this.Parameters = new List<SugarParameter>();
             this.DbColumnInfoList = new List<DbColumnInfo>();
         }
         public SqlSugarClient Context { get; set; }
@@ -20,7 +21,7 @@ namespace SqlSugar
         public List<SugarParameter> Parameters { get; set; }
         public string TableWithString { get; set; }
         public List<DbColumnInfo> DbColumnInfoList { get; set; }
-        public bool IsInsertNull { get; set; }
+        public bool IsNoInsertNull { get; set; }
         public bool IsReturnIdentity { get; set; }
         public EntityInfo EntityInfo { get;  set; }
 
@@ -93,14 +94,13 @@ namespace SqlSugar
             resolveExpress.MappingTables = Context.MappingTables;
             resolveExpress.IgnoreComumnList = Context.IgnoreColumns;
             resolveExpress.Resolve(expression, resolveType);
-            this.Parameters = new List<SugarParameter>();
             this.Parameters.AddRange(resolveExpress.Parameters);
             var reval = resolveExpress.Result;
             return reval;
         }
         public virtual string ToSqlString()
         {
-            if (IsInsertNull)
+            if (IsNoInsertNull)
             {
                 DbColumnInfoList = DbColumnInfoList.Where(it => it.Value != null).ToList();
             }

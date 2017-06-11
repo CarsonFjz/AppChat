@@ -28,7 +28,7 @@ namespace SqlSugar
             string sql = DeleteBuilder.ToSqlString();
             var paramters = DeleteBuilder.Parameters==null?null:DeleteBuilder.Parameters.ToArray();
             RestoreMapping();
-            return Db.GetInt(sql, paramters);
+            return Db.ExecuteCommand(sql, paramters);
         }
         public IDeleteable<T> AS(string tableName)
         {
@@ -57,7 +57,7 @@ namespace SqlSugar
                 var primaryField = primaryFields.Single();
                 foreach (var deleteObj in deleteObjs)
                 {
-                    var entityPropertyName = this.Context.EntityProvider.GetEntityPropertyName<T>(primaryField);
+                    var entityPropertyName = this.Context.EntityProvider.GetPropertyName<T>(primaryField);
                     var columnInfo = EntityInfo.Columns.Single(it => it.PropertyName == entityPropertyName);
                     var value = columnInfo.PropertyInfo.GetValue(deleteObj, null);
                     primaryKeyValues.Add(value);
@@ -82,7 +82,7 @@ namespace SqlSugar
                     {
                         if (i == 0)
                             andString.Append(DeleteBuilder.WhereInAndTemplate + PubConst.Space);
-                        var entityPropertyName = this.Context.EntityProvider.GetEntityPropertyName<T>(primaryField);
+                        var entityPropertyName = this.Context.EntityProvider.GetPropertyName<T>(primaryField);
                         var columnInfo = EntityInfo.Columns.Single(it => it.PropertyName == entityPropertyName);
                         var entityValue = columnInfo.PropertyInfo.GetValue(deleteObj, null);
                         andString.AppendFormat(DeleteBuilder.WhereInEqualTemplate, primaryField, entityValue);

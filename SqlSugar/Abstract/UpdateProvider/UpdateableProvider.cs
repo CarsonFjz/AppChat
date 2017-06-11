@@ -77,7 +77,7 @@ namespace SqlSugar
 
         public IUpdateable<T> UpdateColumns(Expression<Func<T, object>> columns)
         {
-            var ignoreColumns = UpdateBuilder.GetExpressionValue(columns, ResolveExpressType.Array).GetResultArray();
+            var updateColumns = UpdateBuilder.GetExpressionValue(columns, ResolveExpressType.Array).GetResultArray();
             List<string> primaryKeys = GetPrimaryKeys();
             foreach (var item in this.UpdateBuilder.DbColumnInfoList)
             {
@@ -87,7 +87,21 @@ namespace SqlSugar
                     item.IsPrimarykey = true;
                 }
             }
-            this.UpdateBuilder.DbColumnInfoList = this.UpdateBuilder.DbColumnInfoList.Where(it => ignoreColumns.Contains(it.PropertyName) || it.IsPrimarykey == true).ToList();
+            this.UpdateBuilder.DbColumnInfoList = this.UpdateBuilder.DbColumnInfoList.Where(it => updateColumns.Contains(it.PropertyName) || it.IsPrimarykey || it.IsIdentity).ToList();
+            return this;
+        }
+
+        public IUpdateable<T> UpdateColumns(Func<string, bool> updateColumMethod) {
+            List<string> primaryKeys = GetPrimaryKeys();
+            foreach (var item in this.UpdateBuilder.DbColumnInfoList)
+            {
+                var mappingInfo = primaryKeys.SingleOrDefault(i => item.DbColumnName.Equals(i, StringComparison.CurrentCultureIgnoreCase));
+                if (mappingInfo != null && mappingInfo.Any())
+                {
+                    item.IsPrimarykey = true;
+                }
+            }
+            this.UpdateBuilder.DbColumnInfoList = this.UpdateBuilder.DbColumnInfoList.Where(it => updateColumMethod(it.PropertyName) || it.IsPrimarykey ||it.IsIdentity).ToList();
             return this;
         }
         public IUpdateable<T> UpdateColumns(Expression<Func<T, T>> columns)
@@ -108,6 +122,9 @@ namespace SqlSugar
         public IUpdateable<T> Where(bool isUpdateNull, bool IsOffIdentity = false)
         {
             UpdateBuilder.IsOffIdentity = IsOffIdentity;
+            if (this.UpdateBuilder.LambdaExpressions == null)
+                this.UpdateBuilder.LambdaExpressions = InstanceFactory.GetLambdaExpressions(this.Context.CurrentConnectionConfig);
+            this.UpdateBuilder.IsNoUpdateNull = isUpdateNull;
             return this;
         }
         public IUpdateable<T> Where(Expression<Func<T, bool>> expression)
@@ -137,7 +154,7 @@ namespace SqlSugar
             int i = 0;
             foreach (var item in UpdateObjs)
             {
-                List<DbColumnInfo> insertItem = new List<DbColumnInfo>();
+                List<DbColumnInfo> updateItem = new List<DbColumnInfo>();
                 foreach (var column in EntityInfo.Columns)
                 {
                     var columnInfo = new DbColumnInfo()
@@ -148,9 +165,13 @@ namespace SqlSugar
                         PropertyType=PubMethod.GetUnderType(column.PropertyInfo),
                         TableId = i
                     };
-                    insertItem.Add(columnInfo);
+                    if (columnInfo.PropertyType.IsEnum)
+                    {
+                        columnInfo.Value = Convert.ToInt64(columnInfo.Value);
+                    }
+                    updateItem.Add(columnInfo);
                 }
-                this.UpdateBuilder.DbColumnInfoList.AddRange(insertItem);
+                this.UpdateBuilder.DbColumnInfoList.AddRange(updateItem);
                 ++i;
             }
         }

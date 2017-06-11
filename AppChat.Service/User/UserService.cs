@@ -25,7 +25,7 @@ namespace AppChat.Service.User
     {
         private IRedisCache _redisCacheService;
         private IElastic<LayImUser> _elasticUserService;
-        private IElasticChat _elasticChatService;
+        private IElasticChat _elasticChatService = new ElasticChat();
         private SqlSugarClient _context;
         public UserService(IRedisCache redisCacheService, IElastic<LayImUser> elasticService, IElasticChat elasticChatService, SqlSugarClient context)
         {
@@ -40,7 +40,7 @@ namespace AppChat.Service.User
         }
 
         #region 获取用户登录聊天室后的基本信息 
-        public async Task<JsonResultModel> GetChatRoomBaseInfo(int userid)
+        public BaseListResult GetChatRoomBaseInfo(int userid)
         {
             if (userid == 0) { throw new ArgumentException("userid can't be zero"); }
 
@@ -86,15 +86,24 @@ namespace AppChat.Service.User
             #endregion
 
             #region 3.0 群信息
-            //var group = await _groupListService. 
+            var groupModel = _context.Queryable<v_group_detail, layim_group>((d, g) => new object[] { JoinType.Left, d.gid == g.id })
+                                .Where((d, g) => d.userid == userid && g.status == 0)
+                                .Select((d, g) => new GroupEntity {
+                                    id = g.id,
+                                    groupname = g.name,
+                                    avatar = g.headphoto,
+                                    groupdesc = g.groupdesc
+                                }).ToList();
             #endregion
 
             BaseListResult result = new BaseListResult
             {
                 mine = mineModel,
-                friend = friendGroupModel
+                friend = friendGroupModel,
+                group = groupModel
             };
-            return await JsonResultHelper.CreateJsonAsync(result, result != null);
+
+            return result;
         }
         #endregion
 
@@ -146,7 +155,7 @@ namespace AppChat.Service.User
         public List<layim_friend_group_detail> GetUserAllGroups(int userId)
         {
             return _context.Queryable<layim_friend_group_detail>().Where(x => x.uid == userId).ToList();
-        } 
+        }
         #endregion
 
         //#region 获取群组人员信息

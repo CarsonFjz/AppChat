@@ -13,4 +13,9 @@
         public string nickname { get; set; }
         public bool sex { get; set; }
     }
+
+    public class UserInitRequest
+    {
+        public int userid { get; set; }
+    }
 }

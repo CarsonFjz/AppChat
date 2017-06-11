@@ -6,8 +6,9 @@
     <title>Login</title>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="~/Scripts/config.js"></script>
+    <script src="~/Scripts/function.js"></script>
     <script src="~/Scripts/MyAjax.js"></script>
-
+    <script src="~/Scripts/cookie.js"></script>
     <script>
         $(function () {
             $(document).on('click', '#btnLogin', function () {
@@ -21,7 +22,10 @@
                             if (uid <= 0) {
                                 alert('用户名或者密码错误');
                             } else {
-                                location.href = '/';
+                                setCookie(config.user_login_token, uid);
+                                localStorage.setItem('currentUserId', uid);
+                                console.log(localStorage.getItem('currentUserId'));
+                                location.href = '/home/index';
                             }
                         } else {
                             alert(result.msg);
@@ -37,6 +41,6 @@
     <input type="text" placeholder="User Name" id="txtUserName" />
     <input type="password" placeholder="Password" id="txtUserPwd" />
     <input type="button" id="btnLogin" value="Login" />
-    <input type="button" id="btnRegist" value="Regist" />
+    <input type="button" id="btnRegist" value="Regist" onclick="javascrtpt:window.location.href='/home/regist'" />
 </body>
 </html>

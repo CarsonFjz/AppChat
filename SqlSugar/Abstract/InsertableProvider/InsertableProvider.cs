@@ -51,7 +51,7 @@ namespace SqlSugar
             PreToSql();
             string sql = InsertBuilder.ToSqlString();
             RestoreMapping();
-            return Ado.GetInt(sql, InsertBuilder.Parameters==null?null:InsertBuilder.Parameters.ToArray());
+            return Ado.GetInt(sql, InsertBuilder.Parameters == null ? null : InsertBuilder.Parameters.ToArray());
         }
         #endregion
 
@@ -84,18 +84,24 @@ namespace SqlSugar
             return this;
         }
 
+        public IInsertable<T> InsertColumns(Func<string, bool> insertColumMethod)
+        {
+            this.InsertBuilder.DbColumnInfoList = this.InsertBuilder.DbColumnInfoList.Where(it => insertColumMethod(it.PropertyName)).ToList();
+            return this;
+        }
+
         public IInsertable<T> With(string lockString)
         {
             this.InsertBuilder.TableWithString = lockString;
             return this;
         }
 
-        public IInsertable<T> Where(bool isInsertNull, bool isOffIdentity = false)
+        public IInsertable<T> Where(bool isNoInsertNull, bool isOffIdentity = false)
         {
             this.IsOffIdentity = IsOffIdentity;
             if (this.InsertBuilder.LambdaExpressions == null)
                 this.InsertBuilder.LambdaExpressions = InstanceFactory.GetLambdaExpressions(this.Context.CurrentConnectionConfig);
-            this.InsertBuilder.IsInsertNull = isInsertNull;
+            this.InsertBuilder.IsNoInsertNull = isNoInsertNull;
             return this;
         }
         #endregion
@@ -132,8 +138,9 @@ namespace SqlSugar
                 foreach (var item in this.InsertBuilder.DbColumnInfoList)
                 {
                     if (this.InsertBuilder.Parameters == null) this.InsertBuilder.Parameters = new List<SugarParameter>();
-                    var paramters = new SugarParameter(this.SqlBuilder.SqlParameterKeyWord + item.DbColumnName, item.Value,item.PropertyType);
-                    if (InsertBuilder.IsInsertNull && paramters.Value == null) {
+                    var paramters = new SugarParameter(this.SqlBuilder.SqlParameterKeyWord + item.DbColumnName, item.Value, item.PropertyType);
+                    if (InsertBuilder.IsNoInsertNull && paramters.Value == null)
+                    {
                         continue;
                     }
                     this.InsertBuilder.Parameters.Add(paramters);
@@ -152,12 +159,15 @@ namespace SqlSugar
                 {
                     var columnInfo = new DbColumnInfo()
                     {
-                        Value = column.PropertyInfo.GetValue(item,null),
+                        Value = column.PropertyInfo.GetValue(item, null),
                         DbColumnName = GetDbColumnName(column.PropertyName),
                         PropertyName = column.PropertyName,
-                        PropertyType=PubMethod.GetUnderType(column.PropertyInfo),
+                        PropertyType = PubMethod.GetUnderType(column.PropertyInfo),
                         TableId = i
                     };
+                    if (columnInfo.PropertyType.IsEnum) {
+                        columnInfo.Value = Convert.ToInt64(columnInfo.Value);
+                    }
                     insertItem.Add(columnInfo);
                 }
                 this.InsertBuilder.DbColumnInfoList.AddRange(insertItem);

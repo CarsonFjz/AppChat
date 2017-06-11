@@ -22,7 +22,7 @@ namespace AppChat.Facade.Consumers
 
         public async Task Consume(ConsumeContext<AddUserRequest> context)
         {
-            var result = await _registService.UserRegist(context.Message.username, context.Message.password, context.Message.nickname, context.Message.sex);
+            var result = _registService.UserRegist(context.Message.username, context.Message.password, context.Message.nickname, context.Message.sex);
 
             await context.RespondAsync(result);
         }

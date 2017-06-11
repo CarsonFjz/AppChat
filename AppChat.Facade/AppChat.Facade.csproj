@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoFac\FacadeModule.cs" />
+    <Compile Include="Consumers\User\UserInitConsumers.cs" />
     <Compile Include="Consumers\User\UserLoginConsumers.cs" />
     <Compile Include="Consumers\User\UserRegistConsumers.cs" />
     <Compile Include="LogExt\ExceptionLoggerExtension.cs" />

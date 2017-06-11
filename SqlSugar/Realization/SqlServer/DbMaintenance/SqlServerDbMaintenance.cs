@@ -7,31 +7,7 @@ namespace SqlSugar
 {
     public class SqlServerDbMaintenance : DbMaintenanceProvider
     {
-        protected override string AddColumnToTableSql
-        {
-            get
-            {
-                return "ALERT TABLE {0} ADD {1} {2} {3}";
-            }
-        }
-
-        protected override string BackupDataBaseSql
-        {
-            get
-            {
-                return "";
-            }
-        }
-
-        protected override string CreateTableSql
-        {
-            get
-            {
-                return @"CREATE TABLE {0}
-                         {1}";
-            }
-        }
-
+        #region DML
         protected override string GetColumnInfosByTableNameSql
         {
             get
@@ -47,17 +23,16 @@ namespace SqlSugar
 	                       columnproperty(syscolumns.id,syscolumns.name,'IsIdentity')as IsIdentity,
                            (CASE
                                 WHEN EXISTS
-                                       (SELECT 1
-                                        FROM sysobjects
-                                        WHERE xtype= 'pk'
-                                          AND name IN
-                                            (SELECT name
-                                             FROM sysindexes
-                                             WHERE indid IN
-                                                 (SELECT indid
-                                                  FROM sysindexkeys
-                                                  WHERE id = syscolumns.id
-                                                    AND colid=syscolumns.colid ))) THEN 1
+                                       ( 
+                                             	select 1
+												from sysindexes i
+												join sysindexkeys k on i.id = k.id and i.indid = k.indid
+												join sysobjects o on i.id = o.id
+												join syscolumns c on i.id=c.id and k.colid = c.colid
+												where o.xtype = 'U' 
+												and exists(select 1 from sysobjects where xtype = 'PK' and name = i.name) 
+												and o.name=sysobjects.name and c.name=syscolumns.name
+                                       ) THEN 1
                                 ELSE 0
                             END) AS IsPrimaryKey
                     FROM syscolumns
@@ -79,7 +54,6 @@ namespace SqlSugar
                 return sql;
             }
         }
-
         protected override string GetTableInfoListSql
         {
             get
@@ -89,7 +63,6 @@ namespace SqlSugar
 					     	LEFT JOIN sys.extended_properties as tbp ON s.id=tbp.major_id and tbp.minor_id=0  WHERE s.xtype IN('U')";
             }
         }
-
         protected override string GetViewInfoListSql
         {
             get
@@ -99,7 +72,43 @@ namespace SqlSugar
 					     	LEFT JOIN sys.extended_properties as tbp ON s.id=tbp.major_id and tbp.minor_id=0  WHERE s.xtype IN('V')";
             }
         }
+        #endregion
 
+        #region DDL
+        protected override string AddColumnToTableSql
+        {
+            get
+            {
+                return "ALERT TABLE {0} ADD {1} {2} {3}";
+            }
+        }
+        protected override string AlterColumnToTableSql {
+            get
+            {
+                return "ALERT TABLE {0} ALTER COLUMN {1}{2} {3} ";
+            }
+        }
+        protected override string BackupDataBaseSql
+        {
+            get
+            {
+                return @"USE master;BACKUP DATABASE {0} TO disk = '{1}'";
+            }
+        }
+        protected override string CreateTableSql
+        {
+            get
+            {
+                return "CREATE TABLE {0}(\r\n{1})";
+            }
+        }
+        protected override string CreateTableColumn
+        {
+            get
+            {
+                return @"{0} {1}{2} {3}{4}\r\n";
+            }
+        }
         protected override string TruncateTableSql
         {
             get
@@ -107,5 +116,13 @@ namespace SqlSugar
                 return "TRUNCATE TABLE {0}";
             }
         }
+        protected override string BackupTableSql
+        {
+            get
+            {
+                return "SELECT {0} *　INTO {1} FROM  {2}";
+            }
+        }
+        #endregion
     }
 }

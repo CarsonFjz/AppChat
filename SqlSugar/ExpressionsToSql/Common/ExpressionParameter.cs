@@ -15,6 +15,7 @@ namespace SqlSugar
         public Expression LeftExpression { get; set; }
         public Expression RightExpression { get; set; }
         public Expression CurrentExpression { get; set; }
+        public string OperatorValue { get; set; }
         public bool? IsLeft { get; set; }
         public int Index { get; set; }
         public bool ValueIsNull { get; set; }
@@ -27,6 +28,13 @@ namespace SqlSugar
         public void IsAppendTempDate()
         {
             this.AppendType = ExpressionResultAppendType.AppendTempDate;
+        }
+        public Expression OppsiteExpression
+        {
+            get
+            {
+                return this.IsLeft == true ? this.BaseParameter.RightExpression : this.BaseParameter.LeftExpression;
+            }
         }
     }
 }

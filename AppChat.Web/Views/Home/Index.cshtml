@@ -6,6 +6,10 @@
     <title>ASP.NET SignalR + Layim 聊天室（.NET版）</title>
     <link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
     <link href="~/css/menu.css" rel="stylesheet" />
+
+    <script src="~/Scripts/config.js"></script>
+    <script src="~/Scripts/function.js"></script>
+    <script src="~/Scripts/cookie.js"></script>
     <script src="~/Scripts/layui/layui.js"></script>
     <style>
         html {
@@ -44,7 +48,7 @@
         layui.use(['jquery', 'signalr', 'autohub', 'hub'], function (j, s, a, hub) {
             global.hub = hub;
             hub.init({
-                serverUrl: 'http://localhost:8496/layim'
+                serverUrl: config.address.signalR
             });
             //监听连接服务器成功
             hub.on('ready', function (data) {
@@ -150,7 +154,7 @@
             layim.config({
                 //初始化接口
                 init: {
-                    url: '/layimapi/base'
+                    url: urlset('userinit?userid=' + currentUser.userid)
                 }
 
                 ////简约模式（不显示主面板）

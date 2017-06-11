@@ -39,7 +39,7 @@ namespace SqlSugar
         {
             foreach (var item in args)
             {
-                parameter.CommonTempData = CommonTempDataType.ChildNodeSet;
+                parameter.CommonTempData = CommonTempDataType.Result;
                 base.Expression = item;
                 base.Start();
                 var methodCallExpressionArgs = new MethodCallExpressionArgs()
@@ -72,7 +72,7 @@ namespace SqlSugar
         {
             foreach (var item in args)
             {
-                parameter.CommonTempData = CommonTempDataType.ChildNodeSet;
+                parameter.CommonTempData = CommonTempDataType.Result;
                 base.Expression = item;
                 base.Start();
                 var methodCallExpressionArgs = new MethodCallExpressionArgs()
@@ -111,6 +111,10 @@ namespace SqlSugar
         {
             switch (name)
             {
+                case "HasNumber":
+                    return this.Context.DbMehtods.HasNumber(model);
+                case "HasValue":
+                    return this.Context.DbMehtods.HasValue(model);
                 case "IsNullOrEmpty":
                     return this.Context.DbMehtods.IsNullOrEmpty(model);
                 case "ToLower":

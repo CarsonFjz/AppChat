@@ -7,8 +7,8 @@
     <ProjectGuid>{3D133AAD-C093-4634-833F-6063C64A230D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AppChat.SignalRHostSelf</RootNamespace>
-    <AssemblyName>AppChat.SignalRHostSelf</AssemblyName>
+    <RootNamespace>AppChat.SignalR</RootNamespace>
+    <AssemblyName>AppChat.SignalR</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -55,6 +55,10 @@
     </Reference>
     <Reference Include="Microsoft.Owin.Diagnostics, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Diagnostics.3.1.0\lib\net45\Microsoft.Owin.Diagnostics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.3.1.0\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -105,10 +109,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Hubs\ChatHub.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Help\MessageHelper.cs" />
-    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -118,10 +120,6 @@
     <ProjectReference Include="..\AppChat.Cache\AppChat.Cache.csproj">
       <Project>{C9B23AAC-1CF3-427D-9CA0-46C8FA4E1A60}</Project>
       <Name>AppChat.Cache</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AppChat.DI\AppChat.DI.csproj">
-      <Project>{59C54F76-94D2-4459-8A36-44DF6F499F4C}</Project>
-      <Name>AppChat.DI</Name>
     </ProjectReference>
     <ProjectReference Include="..\AppChat.Elastic\AppChat.ElasticSearch.csproj">
       <Project>{6F200504-3A09-437A-93B8-5A610B420E0B}</Project>
@@ -138,6 +136,10 @@
     <ProjectReference Include="..\AppChat.Utils\AppChat.Utils.csproj">
       <Project>{1366E83A-EAD1-4DE4-BC80-523F15BB42B9}</Project>
       <Name>AppChat.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SqlSugar\SqlSugar.csproj">
+      <Project>{489BB790-226C-4FAD-8D1E-51D72A7FF8E5}</Project>
+      <Name>SqlSugar</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

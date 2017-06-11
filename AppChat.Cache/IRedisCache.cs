@@ -11,7 +11,7 @@ namespace AppChat.Cache
 {
     public interface IRedisCache
     {
-        Task CacheUserAfterLogin(int userid);
+        bool CacheUserAfterLogin(int userid, string key = null, string token = null);
         string GetCurrentUserId(HttpContextBase contextBase = null);
         Task OperateOnlineUser(OnlineUser user, bool isDelete = false);
         bool IsOnline(int userid);
