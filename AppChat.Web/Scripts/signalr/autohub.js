@@ -12,7 +12,7 @@
 /// <reference path="jquery.signalR.js" />
 
 /*
-    这段代码是系统自动配合后台代码生成的，如果ChatServer 的Hub代码修改了，需要生成一份，修改下面的代码
+    这段代码是系统自动配合后台代码生成的，如果layimServer 的Hub代码修改了，需要生成一份，修改下面的代码
 */
 layui.define(['signalr'], function (exports) {
     window.jQuery = layui.jquery;

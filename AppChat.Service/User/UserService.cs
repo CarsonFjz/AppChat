@@ -40,9 +40,9 @@ namespace AppChat.Service.User
         }
 
         #region 获取用户登录聊天室后的基本信息 
-        public BaseListResult GetChatRoomBaseInfo(int userid)
+        public BaseListResult GetChatRoomBaseInfo(Guid userid)
         {
-            if (userid == 0) { throw new ArgumentException("userid can't be zero"); }
+            if (userid == Guid.Empty) { throw new ArgumentException("userid can't be zero"); }
 
             #region 1.0 当前用户信息
             var mine = _context.Queryable<layim_user>().Where(x => x.id == userid).Single();
@@ -113,7 +113,7 @@ namespace AppChat.Service.User
         /// </summary>
         /// <param name="userid">用户ID</param>
         /// <returns>返回格式如下 ""或者 "10001,10002,10003"</returns>
-        public async Task<List<v_layim_friend_group_detail_info>> GetUserFriends(int userid)
+        public async Task<List<v_layim_friend_group_detail_info>> GetUserFriends(Guid userid)
         {
             //先读取缓存
             var friends = await _redisCacheService.GetUserFriendList(userid);
@@ -139,10 +139,10 @@ namespace AppChat.Service.User
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
-        public List<ApplyMessage> GetUserApplyMessage(int userid)
+        public List<ApplyMessage> GetUserApplyMessage(Guid userid)
         {
             return _context.Queryable<v_layim_apply>()
-                           .Where(x => x.targetid == userid.ToString() || x.userid == userid)
+                           .Where(x => x.targetid == userid || x.userid == userid)
                            .OrderBy(x => x.applytime, OrderByType.Desc)
                            .ToList().Convert(userid);
         }
@@ -152,9 +152,9 @@ namespace AppChat.Service.User
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<layim_friend_group_detail> GetUserAllGroups(int userId)
+        public List<layim_friend_group_detail> GetUserAllGroups(Guid userid)
         {
-            return _context.Queryable<layim_friend_group_detail>().Where(x => x.uid == userId).ToList();
+            return _context.Queryable<layim_friend_group_detail>().Where(x => x.uid == userid).ToList();
         }
         #endregion
 
@@ -191,7 +191,7 @@ namespace AppChat.Service.User
         //#endregion
 
         //#region 用户创建群
-        //public JsonResultModel CreateGroup(string groupName, string groupDesc, int userid)
+        //public JsonResultModel CreateGroup(string groupName, string groupDesc, Guid userid)
         //{
         //    var dt = _dal.CreateGroup(groupName, groupDesc, userid);
         //    if (dt != null && dt.Rows.Count == 1)
@@ -223,7 +223,7 @@ namespace AppChat.Service.User
         //#endregion
 
         //#region 更换用户皮肤
-        //public bool UpdateUserSkin(int userid, string path)
+        //public bool UpdateUserSkin(Guid userid, string path)
         //{
         //    return _dal.UpdateUserSkin(userid, path);
         //}

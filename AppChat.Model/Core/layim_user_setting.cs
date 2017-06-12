@@ -15,13 +15,6 @@ namespace AppChat.Model.Core
         public Guid id {get;set;}
 
         /// <summary>
-        /// Desc:- 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
-        public int userid {get;set;}
-
-        /// <summary>
         /// Desc:加好友设置，详情看枚举 
         /// Default:- 
         /// Nullable:False 
@@ -48,6 +41,13 @@ namespace AppChat.Model.Core
         /// Nullable:False 
         /// </summary>
         public DateTime updatetime {get;set;}
+
+        /// <summary>
+        /// Desc:- 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid userid {get;set;}
 
     }
 }

@@ -19,13 +19,6 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int userid {get;set;}
-
-        /// <summary>
-        /// Desc:- 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
         public string reply {get;set;}
 
         /// <summary>
@@ -48,6 +41,13 @@ namespace AppChat.Model.Core
         /// Nullable:False 
         /// </summary>
         public DateTime addtime {get;set;}
+
+        /// <summary>
+        /// Desc:- 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid userid {get;set;}
 
     }
 }

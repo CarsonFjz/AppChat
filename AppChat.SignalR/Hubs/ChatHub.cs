@@ -5,25 +5,25 @@ using AppChat.Service._Interface;
 using AppChat.SignalR.Help;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
-
+using System;
 using System.Threading.Tasks;
 
 namespace AppChat.SignalR.Hubs
 {
-    [HubName("ChatHub")]
+    [HubName("layimHub")]
     public class ChatHub : Hub
     {
-        private IRedisCache _redisCache;
-        private IUserService _userServer;
-        private ICreateGroupService _createGroupServer;
-        private IMessageHelper _messageHelp;
-        public ChatHub(IRedisCache redisCache, IMessageHelper messageHelp,ICreateGroupService createGroupServer,IUserService userServer)
-        {
-            _redisCache = redisCache;
-            _createGroupServer = createGroupServer;
-            _messageHelp = messageHelp;
-            _userServer = userServer;
-        }
+        //private IRedisCache _redisCache;
+        //private IUserService _userServer;
+        //private ICreateGroupService _createGroupServer;
+        //private IMessageHelper _messageHelp;
+        //public ChatHub(IRedisCache redisCache, IMessageHelper messageHelp,ICreateGroupService createGroupServer,IUserService userServer)
+        //{
+        //    _redisCache = redisCache;
+        //    _createGroupServer = createGroupServer;
+        //    _messageHelp = messageHelp;
+        //    _userServer = userServer;
+        //}
 
         #region Link
         /// <summary>
@@ -44,7 +44,8 @@ namespace AppChat.SignalR.Hubs
             get
             {
                 var contextBase = Context.Request.GetHttpContext();
-                return _redisCache.GetCurrentUserId(contextBase);
+                //return _redisCache.GetCurrentUserId(contextBase);
+                return string.Empty;
             }
         }
         /// <summary>
@@ -57,7 +58,7 @@ namespace AppChat.SignalR.Hubs
                 return new OnlineUser
                 {
                     connectionid = CurrentConnectId,
-                    userid = CurrentUserId
+                    userId = Guid.Parse(CurrentUserId)
                 };
             }
         }
@@ -95,9 +96,9 @@ namespace AppChat.SignalR.Hubs
         private void UserOnline()
         {
             //将当前用户添加到redis在线用户缓存中
-            _redisCache.OperateOnlineUser(CurrentOnlineUser);
+            //_redisCache.OperateOnlineUser(CurrentOnlineUser);
             //发送用户上线消息
-            _messageHelp.SendUserOnOffLineMessage(CurrentUserId);
+            //_messageHelp.SendUserOnOffLineMessage(CurrentUserId);
             //由于用户群一般不多，这里直接将用户全部加入群组中
             //var groups = _userServer.GetUserAllGroups(CurrentUserId);
             ////遍历组，该connectionId加入到组中，防止收不到消息
@@ -111,9 +112,9 @@ namespace AppChat.SignalR.Hubs
         private void UserOffline()
         {
             //将当前用户从在线用户列表中剔除
-            _redisCache.OperateOnlineUser(CurrentOnlineUser, isDelete: true);
+            //_redisCache.OperateOnlineUser(CurrentOnlineUser, isDelete: true);
             //发送用户下线消息
-            _messageHelp.SendUserOnOffLineMessage(CurrentUserId, online: false);
+            //_messageHelp.SendUserOnOffLineMessage(CurrentUserId, online: false);
         }
         #endregion
     }

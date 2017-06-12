@@ -1,4 +1,4 @@
-﻿using AppChat.IMApi.UserIdProvider;
+﻿using AppChat.SignalR.UserIdProvider;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;

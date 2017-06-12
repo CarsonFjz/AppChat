@@ -13,7 +13,7 @@ namespace AppChat.SignalR.Help
     public interface IMessageHelper
     {
         void SendMessage(object message, string userId, ChatToClientType type, bool moreUser = false);
-        void SendMessage(string userName, Guid groupId);
+        void SendMessage(string userName, string groupId);
         void SendMessage(ApplyHandledMessgae message);
         void SendUserOnOffLineMessage(string userId, bool online = true);
 
@@ -69,7 +69,7 @@ namespace AppChat.SignalR.Help
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="groupId"></param>
-        public void SendMessage(string userName, Guid groupId)
+        public void SendMessage(string userName, string groupId)
         {
             //构造消息体
             ToClientMessageResult result = new ToClientMessageResult
@@ -79,7 +79,7 @@ namespace AppChat.SignalR.Help
                 other = new { groupid = groupId }
             };
 
-            var groupName = _groupServer.CreateName(groupId);
+            var groupName = _groupServer.CreateName(Guid.Parse(groupId));
             hub.Clients.Group(groupName).receiveMessage(result);
         }
 
@@ -92,9 +92,9 @@ namespace AppChat.SignalR.Help
             short agreeFlag = 1;
             short refuseFlag = 2;
             //只有有消息，并且同意
-            if (message.id > 0)
+            if (message.id != Guid.Empty)
             {
-                var userid = message.applyuid.ToString();
+                var userid = message.applyuid;
                 if (message.result == refuseFlag)
                 {
                     //如果是被拒绝，只需要发送一条提示消息即可
@@ -103,7 +103,7 @@ namespace AppChat.SignalR.Help
                     {
                         msg = "您的" + (message.applytype == 0 ? "好友" : "加群") + "请求已经被处理，请点击查看详情"
                     };
-                    SendMessage(msg, userid, ChatToClientType.ApplyHandledToClient);
+                    SendMessage(msg, userid.ToString(), ChatToClientType.ApplyHandledToClient);
 
                 }
                 else if (message.result == agreeFlag)
@@ -113,14 +113,14 @@ namespace AppChat.SignalR.Help
                     if (message.applytype == ApplyType.Friend.GetHashCode())
                     {
                         //这里的friend是为了配合 AppChat的 addList接口
-                        SendMessage(new { friend = message.friend, msg = msg }, userid, ChatToClientType.ApplyHandledToClient);
+                        SendMessage(new { friend = message.friend, msg = msg }, userid.ToString(), ChatToClientType.ApplyHandledToClient);
                     }
                     else
                     {
                         //发送群信息 group也是为了配合AppChat的addList接口
-                        SendMessage(new { group = message.group, msg = msg }, userid, ChatToClientType.ApplyHandledToClient);
+                        SendMessage(new { group = message.group, msg = msg }, userid.ToString(), ChatToClientType.ApplyHandledToClient);
                         //还需要给群发一条，xxx加入群的消息
-                        SendMessage(message.friend.username, message.group.id);
+                        SendMessage(message.friend.username, message.group.id.ToString());
                     }
 
                 }
@@ -132,7 +132,7 @@ namespace AppChat.SignalR.Help
         /// </summary>
         public void SendUserOnOffLineMessage(string userId, bool online = true)
         {
-            int userid = userId.ToInt();
+            Guid userid = Guid.Parse(userId);
             ////1.获取用户的所有好友
 
             var users = _userServer.GetUserFriends(userid).Result;

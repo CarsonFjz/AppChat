@@ -22,13 +22,6 @@ namespace AppChat.Model.Core
         public Guid gid {get;set;}
 
         /// <summary>
-        /// Desc:用户id 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
-        public int uid {get;set;}
-
-        /// <summary>
         /// Desc:0群成员 1 群主 2 群管理员 3游客（游客不能发言） 
         /// Default:((0)) 
         /// Nullable:False 
@@ -55,6 +48,13 @@ namespace AppChat.Model.Core
         /// Nullable:False 
         /// </summary>
         public DateTime addtime {get;set;}
+
+        /// <summary>
+        /// Desc:用户id 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid uid {get;set;}
 
     }
 }

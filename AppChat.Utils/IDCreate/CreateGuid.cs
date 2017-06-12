@@ -12,7 +12,6 @@ namespace AppChat.Utils.IDCreate
         [DllImport("rpcrt4.dll", SetLastError = true)]
         public static extern int UuidCreateSequential(out Guid guid);
         private const int RPC_S_OK = 0;
-
         /// <summary>
         /// 顺序结构的GUID
         /// </summary>

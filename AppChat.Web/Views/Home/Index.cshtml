@@ -7,10 +7,21 @@
     <link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
     <link href="~/css/menu.css" rel="stylesheet" />
 
+
     <script src="~/Scripts/config.js"></script>
     <script src="~/Scripts/function.js"></script>
     <script src="~/Scripts/cookie.js"></script>
     <script src="~/Scripts/layui/layui.js"></script>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.1.2.min.js"></script>
+    <script src="~/Scripts/signalr/autohub.js"></script>
+    <script src="~/Scripts/signalr/client.hub.js"></script>
+    <script>
+    csClient.init({
+        serverUrl: 'http://localhost:54057/layim'
+    });
+    </script>
     <style>
         html {
             background-color: #D9D9D9;
@@ -23,7 +34,7 @@
     <script>
         var global = {
             hub: null,
-            layim: null,
+            chat: null,
             other: null,
             ready: false,
             content: function () { }
@@ -154,7 +165,7 @@
             layim.config({
                 //初始化接口
                 init: {
-                    url: urlset('userinit?userid=' + currentUser.userid)
+                    url: urlset('userinit')
                 }
 
                 ////简约模式（不显示主面板）

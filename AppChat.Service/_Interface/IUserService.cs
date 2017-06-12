@@ -10,12 +10,12 @@ namespace AppChat.Service._Interface
 {
     public interface IUserService
     {
-        BaseListResult GetChatRoomBaseInfo(int userid);
+        BaseListResult GetChatRoomBaseInfo(Guid userid);
         bool IndexUserInfo(LayImUser user);
         JsonResultModel SearchLayImUsers(string keyword, int pageIndex = 1, int pageSize = 50);
         JsonResultModel SearchHistoryMsg(string groupId, DateTime? starttime = null, DateTime? endtime = null, string keyword = null, bool isfile = false, bool isimg = false, int pageIndex = 1, int pageSize = 20);
-        Task<List<v_layim_friend_group_detail_info>> GetUserFriends(int userid);
-        List<ApplyMessage> GetUserApplyMessage(int userid);
-        List<layim_friend_group_detail> GetUserAllGroups(int userId);
+        Task<List<v_layim_friend_group_detail_info>> GetUserFriends(Guid userid);
+        List<ApplyMessage> GetUserApplyMessage(Guid userid);
+        List<layim_friend_group_detail> GetUserAllGroups(Guid userid);
     }
 }

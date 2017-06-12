@@ -22,13 +22,6 @@ namespace AppChat.Model.Core
         public string name {get;set;}
 
         /// <summary>
-        /// Desc:分组归属 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
-        public int belonguid {get;set;}
-
-        /// <summary>
         /// Desc:组创建时间 
         /// Default:(getdate()) 
         /// Nullable:False 
@@ -48,6 +41,13 @@ namespace AppChat.Model.Core
         /// Nullable:False 
         /// </summary>
         public Boolean issystem {get;set;}
+
+        /// <summary>
+        /// Desc:分组归属 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid belonguid {get;set;}
 
     }
 }

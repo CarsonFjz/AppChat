@@ -2,6 +2,7 @@
 using AppChat.Model.Request;
 using AppChat.Service._Interface;
 using MassTransit;
+using System;
 using System.Threading.Tasks;
 
 namespace AppChat.Facade.Consumers
@@ -18,11 +19,11 @@ namespace AppChat.Facade.Consumers
         }
         public async Task Consume(ConsumeContext<LoginRequest> context)
         {
-            int userid = 0;
+            Guid userid = Guid.Empty;
 
             var result = _loginService.UserLogin(context.Message.username, context.Message.password, out userid);
 
-            if (userid > 0)
+            if (userid != Guid.Empty)
             {
                 _redisCacheService.CacheUserAfterLogin(userid);
             }

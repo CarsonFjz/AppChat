@@ -15,13 +15,6 @@ namespace AppChat.Model.Core
         public Guid id {get;set;}
 
         /// <summary>
-        /// Desc:用户ID 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
-        public int userid {get;set;}
-
-        /// <summary>
         /// Desc:申请类型 0 好友 1群 
         /// Default:((0)) 
         /// Nullable:False 
@@ -33,7 +26,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public string targetid {get;set;}
+        public Guid targetid {get;set;}
 
         /// <summary>
         /// Desc:申请时间 
@@ -55,6 +48,13 @@ namespace AppChat.Model.Core
         /// Nullable:False 
         /// </summary>
         public Byte result {get;set;}
+
+        /// <summary>
+        /// Desc:用户ID 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid userid {get;set;}
 
     }
 }

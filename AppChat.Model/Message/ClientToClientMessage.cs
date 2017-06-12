@@ -114,10 +114,10 @@ namespace AppChat.Model.Message
     public class ApplyHandledMessgae
     {
         //id,applytype,targetid,userid
-        public int id { get; set; }
+        public Guid id { get; set; }
         public short applytype { get; set; }
-        public int applyuid { get; set; }
-        public int targetid { get; set; }
+        public Guid applyuid { get; set; }
+        public Guid targetid { get; set; }
         public short result { get; set; }
         //附加群组消息
         public UserGroupCreatedMessage group { get; set; }
@@ -134,7 +134,7 @@ namespace AppChat.Model.Message
         /// <summary>
         /// 当前用户id
         /// </summary>
-        public int userid { get; set; }
+        public Guid userid { get; set; }
         /// <summary>
         /// 用户头像
         /// </summary>

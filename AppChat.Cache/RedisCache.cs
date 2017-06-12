@@ -20,7 +20,7 @@ namespace AppChat.Cache
         StackExchangeRedisCacheClient cacheClient = new StackExchangeRedisCacheClient(serializer);
 
         #region 缓存用户的token
-        public bool CacheUserAfterLogin(int userid, string key = null, string token = null)
+        public bool CacheUserAfterLogin(Guid userid, string key = null, string token = null)
         {
             if (key == null && token == null)
             {
@@ -51,18 +51,18 @@ namespace AppChat.Cache
         {
             if (isDelete)
             {
-                return cacheClient.HashDeleteAsync(LayIMConst.LayIM_All_OnlineUsers, user.userid);
+                return cacheClient.HashDeleteAsync(LayIMConst.LayIM_All_OnlineUsers, user.userId.ToString());
             }
             else
             {
-                return cacheClient.HashSetAsync(LayIMConst.LayIM_All_OnlineUsers, user.userid, user.connectionid);
+                return cacheClient.HashSetAsync(LayIMConst.LayIM_All_OnlineUsers, user.userId.ToString(), user.connectionid);
             }
         }
         #endregion
 
         #region 根据用户ID判断某个用户是否在线
 
-        public bool IsOnline(int userid)
+        public bool IsOnline(Guid userid)
         {
             string result = cacheClient.HashGet<string>(LayIMConst.LayIM_All_OnlineUsers, userid.ToString());
 
@@ -77,12 +77,12 @@ namespace AppChat.Cache
         /// <param name="userId">用户ID</param>
         /// <param name="list">好友列表 1,2,3,4 （不知道好友列表长度会不会超过限制，如果超过限制，就不能用string存储了）</param>
         /// <returns>返回是否成功 true  false</returns>
-        public Task SetUserFriendList(int userId, List<v_layim_friend_group_detail_info> list)
+        public Task SetUserFriendList(Guid userid, List<v_layim_friend_group_detail_info> list)
         {
             if (list.Count > 0)
             {
                 //用户好友列表key
-                var key = string.Format(LayIMConst.LayIM_All_UserFriends, userId);
+                var key = string.Format(LayIMConst.LayIM_All_UserFriends, userid);
                 //如果key已经存在，先remove掉
                 if (cacheClient.Exists(key))
                 {
@@ -96,10 +96,10 @@ namespace AppChat.Cache
         #endregion
 
         #region 获取用户好友列表
-        public async Task<List<v_layim_friend_group_detail_info>> GetUserFriendList(int userId)
+        public async Task<List<v_layim_friend_group_detail_info>> GetUserFriendList(Guid userid)
         {
             //用户好友列表key
-            var key = string.Format(LayIMConst.LayIM_All_UserFriends, userId);
+            var key = string.Format(LayIMConst.LayIM_All_UserFriends, userid);
             //一天过期
             //TODO:存储一天会不会有刷新问题, 应该在用户操作好友删除或者增加时候同时更新缓存的数据
             return await cacheClient.GetAsync<List<v_layim_friend_group_detail_info>>(key);

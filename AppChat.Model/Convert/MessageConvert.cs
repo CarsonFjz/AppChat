@@ -10,7 +10,7 @@ namespace AppChat.Model.Convert
 {
     public static class MessageConvert
     {
-        public static List<ApplyMessage> Convert(this List<v_layim_apply> enitiyList,int userid)
+        public static List<ApplyMessage> Convert(this List<v_layim_apply> enitiyList,Guid userid)
         {
             var list = new List<ApplyMessage>();
 

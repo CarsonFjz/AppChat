@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AppChat.Model.Core
 {
-    public class v_group
+    public class sysdiagrams
     {
         
         /// <summary>
@@ -12,35 +12,35 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public Guid groupid {get;set;}
+        public string name {get;set;}
+
+        /// <summary>
+        /// Desc:- 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public int principal_id {get;set;}
+
+        /// <summary>
+        /// Desc:- 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public int diagram_id {get;set;}
 
         /// <summary>
         /// Desc:- 
         /// Default:- 
         /// Nullable:True 
         /// </summary>
-        public int? userid {get;set;}
+        public int? version {get;set;}
 
         /// <summary>
         /// Desc:- 
         /// Default:- 
         /// Nullable:True 
         /// </summary>
-        public string username {get;set;}
-
-        /// <summary>
-        /// Desc:- 
-        /// Default:- 
-        /// Nullable:True 
-        /// </summary>
-        public string sign {get;set;}
-
-        /// <summary>
-        /// Desc:- 
-        /// Default:- 
-        /// Nullable:True 
-        /// </summary>
-        public string avatar {get;set;}
+        public Byte[] definition {get;set;}
 
     }
 }

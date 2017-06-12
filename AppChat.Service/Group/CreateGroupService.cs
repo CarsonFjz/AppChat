@@ -15,7 +15,7 @@ namespace AppChat.Service
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        string CreateName(int from, int to);
+        string CreateName(Guid from, Guid to);
         string CreateName(Guid gid);
     }
     #endregion
@@ -28,7 +28,7 @@ namespace AppChat.Service
             throw new NotImplementedException();
         }
 
-        public string CreateName(int from, int to)
+        public string CreateName(Guid from, Guid to)
         {
             throw new NotImplementedException();
         }

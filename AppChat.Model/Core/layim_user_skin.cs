@@ -19,13 +19,6 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int userid {get;set;}
-
-        /// <summary>
-        /// Desc:- 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
         public string path {get;set;}
 
         /// <summary>
@@ -34,6 +27,13 @@ namespace AppChat.Model.Core
         /// Nullable:False 
         /// </summary>
         public Boolean isuse {get;set;}
+
+        /// <summary>
+        /// Desc:- 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid userid {get;set;}
 
     }
 }

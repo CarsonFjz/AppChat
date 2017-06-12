@@ -1,4 +1,6 @@
-﻿namespace AppChat.Model.Request
+﻿using System;
+
+namespace AppChat.Model.Request
 {
     public class LoginRequest
     {
@@ -16,6 +18,6 @@
 
     public class UserInitRequest
     {
-        public int userid { get; set; }
+        public Guid userid { get; set; }
     }
 }

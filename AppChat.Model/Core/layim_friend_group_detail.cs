@@ -22,13 +22,6 @@ namespace AppChat.Model.Core
         public Guid gid {get;set;}
 
         /// <summary>
-        /// Desc:用户id 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
-        public int uid {get;set;}
-
-        /// <summary>
         /// Desc:添加时间 
         /// Default:(getdate()) 
         /// Nullable:False 
@@ -41,6 +34,13 @@ namespace AppChat.Model.Core
         /// Nullable:True 
         /// </summary>
         public string gname {get;set;}
+
+        /// <summary>
+        /// Desc:用户id 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid uid {get;set;}
 
     }
 }

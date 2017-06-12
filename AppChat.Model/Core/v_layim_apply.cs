@@ -19,7 +19,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int userid {get;set;}
+        public Guid userid {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -47,7 +47,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public string targetid {get;set;}
+        public Guid targetid {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -75,7 +75,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public byte result {get;set;}
+        public Byte result {get;set;}
 
     }
 }

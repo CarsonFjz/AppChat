@@ -15,13 +15,6 @@ namespace AppChat.Model.Core
         public Guid id {get;set;}
 
         /// <summary>
-        /// Desc:聊天消息发送人，为0 就是系统消息 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
-        public int fromuser {get;set;}
-
-        /// <summary>
         /// Desc:组id 
         /// Default:- 
         /// Nullable:False 
@@ -55,6 +48,13 @@ namespace AppChat.Model.Core
         /// Nullable:False 
         /// </summary>
         public Byte msgtype {get;set;}
+
+        /// <summary>
+        /// Desc:聊天消息发送人，为0 就是系统消息 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid fromuser {get;set;}
 
     }
 }

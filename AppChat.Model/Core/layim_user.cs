@@ -8,13 +8,6 @@ namespace AppChat.Model.Core
     {
         
         /// <summary>
-        /// Desc:- 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
-        public int id {get;set;}
-
-        /// <summary>
         /// Desc:用户登录名 
         /// Default:- 
         /// Nullable:False 
@@ -45,28 +38,37 @@ namespace AppChat.Model.Core
         /// <summary>
         /// Desc:头像 
         /// Default:- 
-        /// Nullable:False 
+        /// Nullable:True 
         /// </summary>
         public string headphoto {get;set;}
 
         /// <summary>
-        /// Desc:创建时间 
-        /// Default:(getdate()) 
-        /// Nullable:False 
-        /// </summary>
-        public long addtime {get;set;}
-
-        /// <summary>
         /// Desc:IM号 
         /// Default:((0)) 
-        /// Nullable:False 
+        /// Nullable:True 
         /// </summary>
-        public int im {get;set;}
+        public int? im {get;set;}
 
         /// <summary>
-        /// 性别
+        /// Desc:- 
+        /// Default:- 
+        /// Nullable:True 
         /// </summary>
-        public bool sex { get; set; }
+        public Boolean? sex {get;set;}
+
+        /// <summary>
+        /// Desc:创建时间 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Int64 addtime {get;set;}
+
+        /// <summary>
+        /// Desc:- 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid id {get;set;}
 
     }
 }

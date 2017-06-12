@@ -72,10 +72,10 @@ namespace AppChat.Model.Core
 
         /// <summary>
         /// Desc:IM号 
-        /// Default:((666666)) 
+        /// Default:- 
         /// Nullable:False 
         /// </summary>
-        public int uid {get;set;}
+        public Guid uid {get;set;}
 
     }
 }

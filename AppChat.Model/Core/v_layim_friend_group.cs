@@ -40,7 +40,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:True 
         /// </summary>
-        public int userid {get;set;}
+        public Guid? userid {get;set;}
 
         /// <summary>
         /// Desc:- 
@@ -68,7 +68,7 @@ namespace AppChat.Model.Core
         /// Default:- 
         /// Nullable:True 
         /// </summary>
-        public DateTime uaddtime {get;set;}
+        public Int64 uaddtime {get;set;}
 
     }
 }

@@ -6,6 +6,7 @@ using AppChat.Service._Interface;
 using AppChat.Utils;
 using AppChat.Utils.Consts;
 using AppChat.Utils.Cookie;
+using AppChat.Utils.IDCreate;
 using AppChat.Utils.JsonResult;
 using AppChat.Utils.Random;
 using SqlSugar;
@@ -34,16 +35,16 @@ namespace AppChat.Service.User
         /// <param name="loginPwd"></param>
         /// <param name="nickName"></param>
         /// <returns></returns>
-        public JsonResultModel UserLogin(string loginName, string loginPwd, out int userid)
+        public JsonResultModel UserLogin(string loginName, string loginPwd, out Guid userid)
         {
-            userid = 0;
+            userid = Guid.Empty;
 
             //TODO:判断用户是否存在,存在就获取信息 done
             var loginUser = _context.Queryable<layim_user>().Where(x => x.loginname == loginName && x.loginpwd == loginPwd).Single();
 
             if (loginUser != null)
             {
-                return JsonResultHelper.CreateJson(new { userid = loginUser });
+                return JsonResultHelper.CreateJson(loginUser);
             }
             return JsonResultHelper.CreateJson(false,"账号或者密码错误");
 
@@ -68,6 +69,7 @@ namespace AppChat.Service.User
             //2.添加用户
             var userModel = new layim_user()
             {
+                id = Generator.CreateRpcrt4Guid(),
                 loginname = loginNmae,
                 nickname = nickName,
                 loginpwd = loginPwd,
@@ -75,7 +77,7 @@ namespace AppChat.Service.User
                 addtime = DateTimeConverter.DateTimeToInt(DateTime.Now)
             };
 
-            var Identity = _context.Insertable(userModel).ExecuteReutrnIdentity();
+            var Identity = _context.Insertable(userModel).ExecuteCommand();
 
             if (Identity > 0)
             {

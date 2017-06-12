@@ -18,15 +18,11 @@
                     data: { username: $('#txtUserName').val(), password: $('#txtUserPwd').val() },
                     success: function (result) {
                         if (result.code == 0) {
-                            var uid = result.data.userid;
-                            if (uid <= 0) {
-                                alert('用户名或者密码错误');
-                            } else {
-                                setCookie(config.user_login_token, uid);
-                                localStorage.setItem('currentUserId', uid);
-                                console.log(localStorage.getItem('currentUserId'));
-                                location.href = '/home/index';
-                            }
+                            var uid = result.data.id;
+                            setCookie(config.user_login_token, uid);
+                            localStorage.setItem('currentUserId', uid);
+                            console.log(localStorage.getItem('currentUserId'));
+                            location.href = '/home/index';
                         } else {
                             alert(result.msg);
                         }

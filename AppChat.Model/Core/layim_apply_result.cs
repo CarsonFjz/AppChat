@@ -22,13 +22,6 @@ namespace AppChat.Model.Core
         public Guid applyid {get;set;}
 
         /// <summary>
-        /// Desc:操作人id 
-        /// Default:- 
-        /// Nullable:False 
-        /// </summary>
-        public int operateid {get;set;}
-
-        /// <summary>
         /// Desc:操作时间 
         /// Default:(getdate()) 
         /// Nullable:False 
@@ -48,6 +41,13 @@ namespace AppChat.Model.Core
         /// Nullable:True 
         /// </summary>
         public string reason {get;set;}
+
+        /// <summary>
+        /// Desc:操作人id 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid operateid {get;set;}
 
     }
 }

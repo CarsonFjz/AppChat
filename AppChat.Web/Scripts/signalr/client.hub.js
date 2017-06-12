@@ -61,7 +61,7 @@
             //连接服务器
             connect: function () {
                 $.connection.hub.url = _this.option.serverUrl;
-                _this.proxy.proxyCS = $.connection.layimHub;
+                _this.proxy.proxyCS = $.connection.chatHub;
                 $.connection.hub.start({ jsonp: true }).done(function () {
                     //连接服务器
                     //TODO处理聊天界面之前的逻辑

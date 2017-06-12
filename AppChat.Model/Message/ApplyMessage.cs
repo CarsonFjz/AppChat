@@ -9,7 +9,7 @@ namespace AppChat.Model.Message
    public class ApplyMessage
     {
         public Guid applyid { get; set; }
-        public int userid { get; set; }
+        public Guid userid { get; set; }
         public string applyname { get; set; }
         public string applyavatar { get; set; }
         public int applyim { get; set; }

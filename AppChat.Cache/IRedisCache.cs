@@ -11,11 +11,11 @@ namespace AppChat.Cache
 {
     public interface IRedisCache
     {
-        bool CacheUserAfterLogin(int userid, string key = null, string token = null);
+        bool CacheUserAfterLogin(Guid userid, string key = null, string token = null);
         string GetCurrentUserId(HttpContextBase contextBase = null);
         Task OperateOnlineUser(OnlineUser user, bool isDelete = false);
-        bool IsOnline(int userid);
-        Task SetUserFriendList(int userId, List<v_layim_friend_group_detail_info> list);
-        Task<List<v_layim_friend_group_detail_info>> GetUserFriendList(int userId);
+        bool IsOnline(Guid userid);
+        Task SetUserFriendList(Guid userid, List<v_layim_friend_group_detail_info> list);
+        Task<List<v_layim_friend_group_detail_info>> GetUserFriendList(Guid userid);
     }
 }

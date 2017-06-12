@@ -59,6 +59,7 @@
     <Compile Include="Help\MessageHelper.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserIdProvider\UserIdProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppChat.Cache\AppChat.Cache.csproj">

@@ -8,7 +8,7 @@ namespace AppChat.Model.Message.DB
 {
    public class LoginUser
     {
-        public int UserId { get; set; }
+        public Guid userid { get; set; }
         public string LoginName { get; set; }
         public string PassWord { get; set; }
     }

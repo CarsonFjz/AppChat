@@ -17,13 +17,6 @@ namespace AppChat.Model.Core
         /// <summary>
         /// Desc:- 
         /// Default:- 
-        /// Nullable:False 
-        /// </summary>
-        public int uid {get;set;}
-
-        /// <summary>
-        /// Desc:- 
-        /// Default:- 
         /// Nullable:True 
         /// </summary>
         public string ip {get;set;}
@@ -41,6 +34,13 @@ namespace AppChat.Model.Core
         /// Nullable:False 
         /// </summary>
         public DateTime addtime {get;set;}
+
+        /// <summary>
+        /// Desc:- 
+        /// Default:- 
+        /// Nullable:False 
+        /// </summary>
+        public Guid uid {get;set;}
 
     }
 }

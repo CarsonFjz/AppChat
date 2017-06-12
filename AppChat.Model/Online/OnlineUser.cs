@@ -11,7 +11,7 @@ namespace AppChat.Model.Online
     /// </summary>
     public class OnlineUser
     {
-        public string userid { get; set; }
+        public Guid userId { get; set; }
         public string connectionid { get; set; }
     }
 }

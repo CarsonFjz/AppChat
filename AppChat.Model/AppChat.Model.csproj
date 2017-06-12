@@ -62,8 +62,8 @@
     <Compile Include="Core\layim_user_autoreply.cs" />
     <Compile Include="Core\layim_user_setting.cs" />
     <Compile Include="Core\layim_user_skin.cs" />
-    <Compile Include="Core\salary.cs" />
-    <Compile Include="Core\v_group.cs" />
+    <Compile Include="Core\salarys.cs" />
+    <Compile Include="Core\sysdiagrams.cs" />
     <Compile Include="Core\v_group_detail.cs" />
     <Compile Include="Core\v_layim_apply.cs" />
     <Compile Include="Core\v_layim_friend_group.cs" />

@@ -11,14 +11,6 @@ namespace AppChat.Model
 {
 
 
-    /// <summary>
-    /// 基类
-    /// </summary>
-    public class AvatarIntEntity
-    {
-        public int id { get; set; }
-        public string avatar { get; set; }
-    }
     public class AvatarGuidEntity
     {
         public Guid id { get; set; }
@@ -28,7 +20,7 @@ namespace AppChat.Model
     /// <summary>
     /// 用户
     /// </summary>
-    public class UserEntity : AvatarIntEntity
+    public class UserEntity : AvatarGuidEntity
     {
         public string status { get; set; }
         public string username { get; set; }
