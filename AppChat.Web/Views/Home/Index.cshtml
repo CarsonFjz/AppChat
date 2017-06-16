@@ -13,15 +13,6 @@
     <script src="~/Scripts/cookie.js"></script>
     <script src="~/Scripts/layui/layui.js"></script>
 
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/jquery.signalR-2.1.2.min.js"></script>
-    <script src="~/Scripts/signalr/autohub.js"></script>
-    <script src="~/Scripts/signalr/client.hub.js"></script>
-    <script>
-    csClient.init({
-        serverUrl: 'http://localhost:54057/layim'
-    });
-    </script>
     <style>
         html {
             background-color: #D9D9D9;
@@ -29,7 +20,6 @@
     </style>
 </head>
 <body>
-
     <script src="~/Scripts/login.js"></script>
     <script>
         var global = {
@@ -47,7 +37,6 @@
     </script>
     <script>
     if (typeof layui === "object") {
-        var kefu = '@Request.QueryString["t"]' == 'kefu';
         //自定义模块
         layui.extend({
             signalr: '/Scripts/signalr/signalr',
@@ -79,7 +68,6 @@
                     case chatType.ClientToGroup:
                         //这里做判断，是因为消息也会推送给自己，当然后台可以选择不推给自己，因为后台按照组的形式，所以，退给自己的一个好处就是能够知道消息确实发出去了，否则，只是客户端感觉消息出去了。
                         if (currentUser.userid != result.msg.fromid) {
-                            result.msg.type = result.msg.type == 'kefu' ? 'friend' : result.msg.type;
                             global.layim.getMessage(result.msg);//因为result.msg 是合乎layim接口规范，所以直接带入
                             console.log('添加消息');
                         }
@@ -218,14 +206,6 @@
                 ,
                 find: '/home/find'
             });
-            if (kefu) {
-                layim.chat({
-                    name: '在线客服-小苍'
-                    , type: 'kefu'
-                    , avatar: '/headphotos/default.jpg'
-                    , id: 10006
-                });
-            }
             layim.on('online', function (data) {
                 console.log(data);
             });

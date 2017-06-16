@@ -6,14 +6,13 @@ using Autofac.Integration.WebApi;
 using Serilog;
 using System.Reflection;
 using System.Web.Http;
-using System.Web.Http.Cors;
-
 namespace AppChat.IMApi
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
         {
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
             var builder = new ContainerBuilder();

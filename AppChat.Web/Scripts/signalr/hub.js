@@ -61,6 +61,7 @@ layui.define(['autohub'], function (exports) {
                 //连接服务器
                 connect: function () {
                     $.connection.hub.url = _this.option.serverUrl;
+                    $.connection.hub.logging = true;
                     _this.proxy.proxyCS = $.connection.layimHub;
                     console.log(_this.proxy.proxyCS.client);
                     $.connection.hub.start({ jsonp: true }).done(function () {

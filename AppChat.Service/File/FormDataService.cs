@@ -26,7 +26,7 @@ namespace AppChat.Service.File
                 {
                     var name = pi.Name;//获取model的字段名
 
-                    if (name == item)
+                    if (name.ToString() == item.ToString())
                     {
                         pi.SetValue(model, provider.FormData[name]);//把对应的值value放进该字段,可以设置下标
                     }

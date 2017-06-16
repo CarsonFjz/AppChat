@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace AppChat.SignalR.Hubs
 {
     [HubName("layimHub")]
-    public class ChatHub : Hub
+    public class layimHub : Hub
     {
         //private IRedisCache _redisCache;
         //private IUserService _userServer;

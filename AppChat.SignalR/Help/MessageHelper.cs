@@ -26,7 +26,7 @@ namespace AppChat.SignalR.Help
         {
             get
             {
-                return GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+                return GlobalHost.ConnectionManager.GetHubContext<layimHub>();
             }
         }
         public MessageHelper(ICreateGroupService groupServer, IUserService userServer)

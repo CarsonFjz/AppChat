@@ -1,32 +1,58 @@
-﻿using AppChat.IMApi.UserIdProvider;
-using Microsoft.AspNet.SignalR;
+﻿
 using Microsoft.Owin;
-using Microsoft.Owin.Cors;
 using Owin;
+using AppChat.SignalR.UserIdProvider;
+using Microsoft.AspNet.SignalR;
 using System.Diagnostics;
+using System.Web.Cors;
+using Microsoft.Owin.Cors;
+using System.Threading.Tasks;
+using System;
+using AppChat.SignalR.Hubs;
 
-[assembly: OwinStartup(typeof(Startup))]
-public partial class Startup
+[assembly: OwinStartup(typeof(AppChat.Web.Startup))]
+
+namespace AppChat.Web
 {
-    public void Configuration(IAppBuilder app)
+    public class Startup
     {
-        app.UseErrorPage();
-
-        var userIdProvider = new UserCache();
-
-        GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => userIdProvider);
-
-        app.Map("/layim", map =>
+        public void Configuration(IAppBuilder app)
         {
-            var config = new HubConfiguration
+            var userIdProvider = new UserCache();
+
+            GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => userIdProvider);
+
+            app.Map("/signalR", map =>
             {
-                EnableJSONP = true
-            };
+                map.UseCors(CorsOptions.AllowAll);
 
-            map.UseCors(CorsOptions.AllowAll)
-               .RunSignalR(config);
-        });
+                var config = new HubConfiguration
+                {
+                    EnableJSONP = true,
+                    EnableJavaScriptProxies = true
+                };
 
-        GlobalHost.TraceManager.Switch.Level = SourceLevels.Information;
+                map.RunSignalR(config);
+            });
+        }
+
+        //private static readonly Lazy<CorsOptions> SignalrCorsOptions = new Lazy<CorsOptions>(() =>
+        //{
+        //    return new CorsOptions
+        //    {
+        //        PolicyProvider = new CorsPolicyProvider
+        //        {
+        //            PolicyResolver = context =>
+        //            {
+        //                var policy = new CorsPolicy();
+        //                policy.AllowAnyOrigin = true;
+        //                policy.AllowAnyMethod = true;
+        //                policy.AllowAnyHeader = true;
+        //                policy.SupportsCredentials = false;
+        //                return Task.FromResult(policy);
+        //            }
+        //        }
+        //    };
+        //});
     }
 }
